@@ -40,6 +40,16 @@
                       <template x-for="task in tasks[shift][staff][weekday]">
                         <li x-text="task.name"></li>
                       </template>
+                      <template
+                        x-for="task in getTrainingSection({staffName: staff, weekday})"
+                      >
+                        <li x-text="`#${task.name}`"></li>
+                      </template>
+                      <template x-for="dayoffStaff in dayOffs[weekday]">
+                        <template x-if="dayoffStaff == staff">
+                          <li class="has-text-danger">Day Off</li>
+                        </template>
+                      </template>
                     </ul>
                   </td>
                 </template>
@@ -49,20 +59,23 @@
         </template>
       </table>
     </section>
+
     <section class="section">
-      <h1 class='title'>Unassigned Tasks</h1>
-      <table class='table is-bordered is-striped is-narrow is-hoverable'>
+      <h1 class="title">Unassigned Tasks</h1>
+      <table class="table is-bordered is-striped is-narrow is-hoverable">
         <tr>
           <th>Weekday</th>
           <th>Task</th>
         </tr>
-        <template x-for='task in unassignedTasks'>
+        <template x-for="task in unassignedTasks">
           <tr>
-            <td x-text='task.freq'></td>
-            <td x-text='task.name'></td>
-          <tr>
+            <td
+              x-text="task.weekday.charAt(0).toUpperCase() + task.weekday.substring(1)"
+            ></td>
+            <td x-text="task.name"></td>
+          </tr>
         </template>
-        <table>
+      </table>
     </section>
   </body>
   <script>
@@ -72,14 +85,28 @@
         tasks: [],
         shifts: ['Asia', 'EU', 'US'],
         weekdays: ['mon', 'tue', 'wed', 'thu', 'fri'],
+        traineeTasks: [],
         unassignedTasks: [],
+        dayOffs: [],
         async init() {
           const response = await fetch('./assignedTasks.json')
           const tasks = await response.json()
           this.tasks = tasks
 
+          const traineeResponse = await fetch('./traineeTasks.json')
+          this.traineeTasks = await traineeResponse.json()
+
           const unassignedResponse = await fetch('./unassignedTasks.json')
           this.unassignedTasks = await unassignedResponse.json()
+
+          const dayOffResponse = await fetch('./dayOff.json')
+          this.dayOffs = await dayOffResponse.json()
+        },
+        getTrainingSection({ staffName, weekday }) {
+          return this.traineeTasks.filter(
+            (task) =>
+              task.trainees.includes(staffName) && task.weekday == weekday
+          )
         }
       }))
     })

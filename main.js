@@ -5,7 +5,6 @@ const TASKS = require('./data/tasks.json')
 const STAFFS = _.shuffle(require('./data/staffs.json'))
 const CONFLICTS = require('./data/conflicts.json')
 const UNAVAILABLES = require('./data/unavailables.json')
-const { warn } = require('console')
 
 const staffWorkloads = STAFFS.map(({ name }) => ({
   name,
@@ -23,7 +22,7 @@ const assignedTasks = [
 const unassignedTasks = []
 
 assignedTasks.forEach((assignedTask) => {
-  const freq = assignedTask.name
+  const weekday = assignedTask.name
   const assignedStaffsInConflictCatTask = []
 
   CONFLICTS.cat.forEach((conflict) => {
@@ -33,7 +32,7 @@ assignedTasks.forEach((assignedTask) => {
     })
   })
 
-  TASKS.filter(({ frequencies }) => frequencies.includes(freq)).forEach(
+  TASKS.filter(({ weekdays }) => weekdays.includes(weekday)).forEach(
     ({ name, cat, trainers, trainees, shifts, duration }) => {
       shifts.forEach(function (shift) {
         const matchedStaffs = _.filter(STAFFS, (s) => {
@@ -48,12 +47,12 @@ assignedTasks.forEach((assignedTask) => {
           return (
             s.shift == shift &&
             _.includes(trainers, s.name) &&
-            !_.includes(UNAVAILABLES[freq], s.name)
+            !_.includes(UNAVAILABLES[weekday], s.name)
           )
         })
 
         if (matchedStaffs.length == 0) {
-          unassignedTasks.push({ freq, name })
+          unassignedTasks.push({ weekday, name })
           return
         }
 
@@ -82,11 +81,25 @@ assignedTasks.forEach((assignedTask) => {
           found.workload += duration
         }
 
-        console.log(assignedStaffsInConflictCatTask)
+        const workingTrainees = _.remove(trainees, function (trainee) {
+          const dayOff = UNAVAILABLES[weekday]
+          if (dayOff) {
+            const isDayOff = dayOff.includes(trainee)
+            return !isDayOff
+          }
+        })
+
+        workingTrainees.forEach((trainee) => {
+          const found = staffWorkloads.find((w) => w.name == trainee)
+
+          if (found) {
+            found.workload += duration
+          }
+        })
         assignedTask.tasks.push({
           name,
           shift,
-          freq,
+          weekday,
           trainer: staff.name,
           trainees
         })
@@ -106,13 +119,14 @@ const flattenTasks = _.reduce(
   },
   []
 )
+const traineeTasks = flattenTasks.filter(({ trainees }) => trainees.length > 0)
 
 const result = _(flattenTasks)
   .groupBy('shift')
   .mapValues((task) => {
     const groupedTasks = _.groupBy(task, 'trainer')
     const result = _.mapValues(groupedTasks, (task) => {
-      return _.groupBy(task, 'freq')
+      return _.groupBy(task, 'weekday')
     })
     return result
   })
@@ -123,13 +137,27 @@ fs.writeFileSync(
   JSON.stringify(result, null, 2),
   'utf8'
 )
+
+fs.writeFileSync(
+  './out/traineeTasks.json',
+  JSON.stringify(traineeTasks, null, 2),
+  'utf8'
+)
+
 fs.writeFileSync(
   './out/workload.json',
   JSON.stringify(staffWorkloads, null, 2),
   'utf8'
 )
+
 fs.writeFileSync(
   './out/unassignedTasks.json',
   JSON.stringify(unassignedTasks, null, 2),
+  'utf8'
+)
+
+fs.writeFileSync(
+  './out/dayOff.json',
+  JSON.stringify(UNAVAILABLES, null, 2),
   'utf8'
 )
