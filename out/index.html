@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" class="theme-light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Working Schedule</title>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    />
+  </head>
+  <body x-data="data">
+    <section class="section">
+      <h1 class="title">Assigned Tasks</h1>
+      <table
+        class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+      >
+        <tr>
+          <th>Shift</th>
+          <th>Staff</th>
+          <th>Mon</th>
+          <th>Tue</th>
+          <th>Wed</th>
+          <th>Thu</th>
+          <th>Fri</th>
+        </tr>
+        <template x-for="shift in shifts">
+          <template x-if="tasks[shift]">
+            <template x-for="staff in Object.keys(tasks[shift])">
+              <tr>
+                <td x-text="shift"></td>
+                <td x-text="staff"></td>
+                <template x-for="weekday in weekdays">
+                  <td class="content">
+                    <ul>
+                      <template x-for="task in tasks[shift][staff][weekday]">
+                        <li x-text="task.name"></li>
+                      </template>
+                    </ul>
+                  </td>
+                </template>
+              </tr>
+            </template>
+          </template>
+        </template>
+      </table>
+    </section>
+    <section class="section">
+      <h1 class='title'>Unassigned Tasks</h1>
+      <table class='table is-bordered is-striped is-narrow is-hoverable'>
+        <tr>
+          <th>Weekday</th>
+          <th>Task</th>
+        </tr>
+        <template x-for='task in unassignedTasks'>
+          <tr>
+            <td x-text='task.freq'></td>
+            <td x-text='task.name'></td>
+          <tr>
+        </template>
+        <table>
+    </section>
+  </body>
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('data', () => ({
+        staffs: [],
+        tasks: [],
+        shifts: ['Asia', 'EU', 'US'],
+        weekdays: ['mon', 'tue', 'wed', 'thu', 'fri'],
+        unassignedTasks: [],
+        async init() {
+          const response = await fetch('./assignedTasks.json')
+          const tasks = await response.json()
+          this.tasks = tasks
+
+          const unassignedResponse = await fetch('./unassignedTasks.json')
+          this.unassignedTasks = await unassignedResponse.json()
+        }
+      }))
+    })
+  </script>
+</html>

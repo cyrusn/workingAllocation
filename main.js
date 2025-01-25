@@ -83,7 +83,13 @@ assignedTasks.forEach((assignedTask) => {
         }
 
         console.log(assignedStaffsInConflictCatTask)
-        assignedTask.tasks.push({ name, shift, trainer: staff.name, trainees })
+        assignedTask.tasks.push({
+          name,
+          shift,
+          freq,
+          trainer: staff.name,
+          trainees
+        })
       })
     }
   )
@@ -92,11 +98,25 @@ assignedTasks.forEach((assignedTask) => {
 console.log(staffWorkloads)
 console.log(unassignedTasks)
 
-const result = assignedTasks.map((task) => {
-  const name = task.name
-  const tasks = _.groupBy(task.tasks, 'trainer')
-  return { name, tasks }
-})
+const flattenTasks = _.reduce(
+  assignedTasks,
+  (prev, task) => {
+    prev.push(...task.tasks)
+    return prev
+  },
+  []
+)
+
+const result = _(flattenTasks)
+  .groupBy('shift')
+  .mapValues((task) => {
+    const groupedTasks = _.groupBy(task, 'trainer')
+    const result = _.mapValues(groupedTasks, (task) => {
+      return _.groupBy(task, 'freq')
+    })
+    return result
+  })
+  .value()
 
 fs.writeFileSync(
   './out/assignedTasks.json',
