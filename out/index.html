@@ -65,6 +65,7 @@
       <table class="table is-bordered is-striped is-narrow is-hoverable">
         <tr>
           <th>Weekday</th>
+          <th>Shift</th>
           <th>Task</th>
         </tr>
         <template x-for="task in unassignedTasks">
@@ -72,6 +73,7 @@
             <td
               x-text="task.weekday.charAt(0).toUpperCase() + task.weekday.substring(1)"
             ></td>
+            <td x-text="task.shift"></td>
             <td x-text="task.name"></td>
           </tr>
         </template>

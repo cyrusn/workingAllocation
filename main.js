@@ -54,7 +54,7 @@ assignedTasks.forEach((assignedTask) => {
         })
 
         if (matchedStaffs.length == 0) {
-          unassignedTasks.push({ weekday, name })
+          unassignedTasks.push({ weekday, name, shift })
           return
         }
 
