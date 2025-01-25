@@ -68,31 +68,30 @@ assignedTasks.forEach((assignedTask) => {
           ['desc']
         )[0]
 
-        if (trainees.length > 0) {
-          const foundConflictedStaff = assignedStaffsInConflictCatTask.find(
-            (c) => c.cat.includes(cat)
-          )
+        const foundConflictedStaff = assignedStaffsInConflictCatTask.find((c) =>
+          c.cat.includes(cat)
+        )
 
-          if (foundConflictedStaff) {
-            foundConflictedStaff.staffs.push(staff.name)
-          }
-
-          const workingTrainees = _.remove(trainees, function (trainee) {
-            const dayOff = UNAVAILABLES[weekday]
-            if (dayOff) {
-              const isDayOff = dayOff.includes(trainee)
-              return !isDayOff
-            }
-          })
-
-          workingTrainees.forEach((trainee) => {
-            const found = staffWorkloads.find((w) => w.name == trainee)
-
-            if (found) {
-              found.workload += duration
-            }
-          })
+        if (foundConflictedStaff) {
+          foundConflictedStaff.staffs.push(staff.name)
         }
+
+        const workingTrainees = _.filter(trainees, function (trainee) {
+          const dayOffStaffs = UNAVAILABLES[weekday]
+          if (dayOffStaffs && dayOffStaffs.length > 0) {
+            const isDayOff = dayOffStaffs.includes(trainee)
+            return !isDayOff
+          }
+          return true
+        })
+
+        workingTrainees.forEach((trainee) => {
+          const found = staffWorkloads.find((w) => w.name == trainee)
+
+          if (found) {
+            found.workload += duration
+          }
+        })
 
         const found = staffWorkloads.find((w) => w.name == staff.name)
         if (found) {
@@ -104,7 +103,7 @@ assignedTasks.forEach((assignedTask) => {
           shift,
           weekday,
           trainer: staff.name,
-          trainees
+          trainees: workingTrainees
         })
       })
     }

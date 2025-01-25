@@ -1,26 +1,26 @@
 [
   {
     "name": "Winnie",
-    "workload": 7
-  },
-  {
-    "name": "Georgi",
-    "workload": 11
-  },
-  {
-    "name": "Snezhi",
-    "workload": 7.5
-  },
-  {
-    "name": "Allison",
-    "workload": 8.5
-  },
-  {
-    "name": "Dimitar",
-    "workload": 9
+    "workload": 8
   },
   {
     "name": "Simona",
-    "workload": 5
+    "workload": 6
+  },
+  {
+    "name": "Dimitar",
+    "workload": 10
+  },
+  {
+    "name": "Snezhi",
+    "workload": 6.5
+  },
+  {
+    "name": "Georgi",
+    "workload": 10
+  },
+  {
+    "name": "Allison",
+    "workload": 11.5
   }
 ]
