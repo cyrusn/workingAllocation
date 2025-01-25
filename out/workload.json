@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Winnie",
+    "workload": 7
+  },
+  {
+    "name": "Georgi",
+    "workload": 11
+  },
+  {
+    "name": "Snezhi",
+    "workload": 7.5
+  },
+  {
+    "name": "Allison",
+    "workload": 8.5
+  },
+  {
+    "name": "Dimitar",
+    "workload": 9
+  },
+  {
+    "name": "Simona",
+    "workload": 5
+  }
+]

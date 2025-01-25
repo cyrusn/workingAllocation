@@ -1,0 +1,8 @@
+[
+  { "name": "Winnie", "shift": "Asia", "location": "HK" },
+  { "name": "Allison", "shift": "Asia", "location": "HK" },
+  { "name": "Snezhi", "shift": "EU", "location": "Sofia" },
+  { "name": "Simona", "shift": "EU", "location": "Sofia" },
+  { "name": "Dimitar", "shift": "US", "location": "Sofia" },
+  { "name": "Georgi", "shift": "US", "location": "Sofia" }
+]

@@ -1,0 +1,83 @@
+[
+  {
+    "name": "Invoice-Barc/Citi/JPM",
+    "cat": "invoice",
+    "trainers": ["Winnie", "Allison"],
+    "trainees": [],
+    "shifts": ["Asia"],
+    "frequencies": ["mon", "tue", "wed", "thu", "fri"],
+    "duration": 1.5
+  },
+  {
+    "name": "Invoice-Barc",
+    "cat": "invoice",
+    "trainers": ["Snezhi"],
+    "trainees": [],
+    "shifts": ["EU"],
+    "frequencies": ["mon", "tue", "wed", "thu", "fri"],
+    "duration": 0.5
+  },
+  {
+    "name": "Invoice-Barc/Citi/JPM/CB/HDFC",
+    "cat": "invoice",
+    "trainers": ["Dimitar", "Georgi"],
+    "trainees": ["Winnie"],
+    "shifts": ["US"],
+    "frequencies": ["mon", "tue", "wed", "thu", "fri"],
+    "duration": 2
+  },
+  {
+    "name": "Wire-Citi/Barc/JPM",
+    "cat": "wire",
+    "trainers": ["Allison", "Winnie"],
+    "trainees": [],
+    "shifts": ["Asia"],
+    "frequencies": ["mon", "tue", "wed", "thu", "fri"],
+    "duration": 1
+  },
+  {
+    "name": "Wire-Citi/Barc/CB",
+    "cat": "wire",
+    "trainers": ["Snezhi", "Simona"],
+    "trainees": [],
+    "shifts": ["EU"],
+    "frequencies": ["mon", "tue", "wed", "thu", "fri"],
+    "duration": 1
+  },
+  {
+    "name": "Wire-Citi/Citi/CB",
+    "cat": "wire",
+    "trainers": ["Dimitar", "Georgi"],
+    "trainees": [],
+    "shifts": ["US"],
+    "frequencies": ["mon", "tue", "wed", "thu", "fri"],
+    "duration": 1
+  },
+  {
+    "name": "Rec & Confirm-Citi/Barc/JPM",
+    "cat": "recon",
+    "trainers": ["Allison", "Winnie"],
+    "trainees": [],
+    "shifts": ["Asia"],
+    "frequencies": ["mon", "tue", "wed", "thu", "fri"],
+    "duration": 1
+  },
+  {
+    "name": "Rec & Confirm-Citi/Barc/CB",
+    "cat": "recon",
+    "trainers": ["Snezhi", "Simona"],
+    "trainees": [],
+    "shifts": ["EU"],
+    "frequencies": ["mon", "tue", "wed", "thu", "fri"],
+    "duration": 1
+  },
+  {
+    "name": "Rec & Confirm-Citi/Citi/CB",
+    "cat": "recon",
+    "trainers": ["Dimitar", "Georgi"],
+    "trainees": [],
+    "shifts": ["US"],
+    "frequencies": ["mon", "tue", "wed", "thu", "fri"],
+    "duration": 1
+  }
+]
