@@ -36,12 +36,14 @@ assignedTasks.forEach((assignedTask) => {
     ({ name, cat, trainers, trainees, shifts, duration }) => {
       shifts.forEach(function (shift) {
         const matchedStaffs = _.filter(STAFFS, (s) => {
-          const foundConflictedStaff = assignedStaffsInConflictCatTask.find(
-            (c) => c.cat.includes(cat) && c.staffs.includes(s.name)
-          )
+          if (trainees.length == 0) {
+            const foundConflictedStaff = assignedStaffsInConflictCatTask.find(
+              (c) => c.cat.includes(cat) && c.staffs.includes(s.name)
+            )
 
-          if (foundConflictedStaff) {
-            return false
+            if (foundConflictedStaff) {
+              return false
+            }
           }
 
           return (
@@ -68,12 +70,14 @@ assignedTasks.forEach((assignedTask) => {
           ['desc']
         )[0]
 
-        const foundConflictedStaff = assignedStaffsInConflictCatTask.find((c) =>
-          c.cat.includes(cat)
-        )
+        if (trainees.length == 0) {
+          const foundConflictedStaff = assignedStaffsInConflictCatTask.find(
+            (c) => c.cat.includes(cat)
+          )
 
-        if (foundConflictedStaff) {
-          foundConflictedStaff.staffs.push(staff.name)
+          if (foundConflictedStaff) {
+            foundConflictedStaff.staffs.push(staff.name)
+          }
         }
 
         const workingTrainees = _.filter(trainees, function (trainee) {
