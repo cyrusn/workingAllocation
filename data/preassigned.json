@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Invoice-Barc/Citi/JPM",
+    "shift": "Asia",
+    "staffs": ["Winnie"]
+  },
+  {
+    "name": "Rec & Confirm-Citi/Barc/CB",
+    "shift": "EU",
+    "staffs": ["Simona"]
+  }
+]

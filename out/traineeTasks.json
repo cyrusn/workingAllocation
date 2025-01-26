@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Invoice-Barc/Citi/JPM/CB/HDFC",
+    "shift": "US",
+    "weekday": "tue",
+    "cat": "invoice",
+    "trainer": "Dimitar",
+    "trainees": [
+      "Georgi"
+    ]
+  },
+  {
+    "name": "Invoice-Barc/Citi/JPM/CB/HDFC",
+    "shift": "US",
+    "weekday": "wed",
+    "cat": "invoice",
+    "trainer": "Dimitar",
+    "trainees": [
+      "Georgi"
+    ]
+  },
+  {
+    "name": "Invoice-Barc/Citi/JPM/CB/HDFC",
+    "shift": "US",
+    "weekday": "thu",
+    "cat": "invoice",
+    "trainer": "Dimitar",
+    "trainees": [
+      "Georgi"
+    ]
+  },
+  {
+    "name": "Invoice-Barc/Citi/JPM/CB/HDFC",
+    "shift": "US",
+    "weekday": "fri",
+    "cat": "invoice",
+    "trainer": "Dimitar",
+    "trainees": [
+      "Georgi"
+    ]
+  }
+]

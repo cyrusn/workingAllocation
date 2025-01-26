@@ -1,10 +1,17 @@
 [
   {
-    "freq": "tue",
-    "name": "Rec & Confirm-Citi/Barc/JPM"
+    "weekday": "mon",
+    "name": "Wire-Citi/Citi/CB",
+    "shift": "US"
   },
   {
-    "freq": "fri",
-    "name": "Rec & Confirm-Citi/Barc/JPM"
+    "weekday": "tue",
+    "name": "Wire-Citi/Barc/CB",
+    "shift": "EU"
+  },
+  {
+    "weekday": "fri",
+    "name": "Wire-Citi/Barc/JPM",
+    "shift": "Asia"
   }
 ]

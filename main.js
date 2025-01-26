@@ -3,9 +3,12 @@ const fs = require('fs')
 
 const TASKS = _.shuffle(require('./data/tasks.json'))
 const STAFFS = _.shuffle(require('./data/staffs.json'))
-const CONFLICTS = require('./data/conflicts.json')
+const REQUIREMENTS = require('./data/requirements.json')
 const UNAVAILABLES = require('./data/unavailables.json')
 const PREASSIGNED_TASKS = require('./data/preassigned.json')
+
+const CONFLICTS = REQUIREMENTS.conflicts
+const ONE_PERSON_TASKS = REQUIREMENTS.onePersonTasks
 
 const workloads = STAFFS.map(({ name }) => ({
   name,
@@ -141,29 +144,52 @@ function getMatchedTrainers(task, assignedTasks, dayOffStaffs) {
 
   if (preassignedStaffs.length > 0) return preassignedStaffs
 
-  return _.filter(STAFFS, (s) => {
-    if (dayOffStaffs.includes(s.name)) return false
+  return _(STAFFS)
+    .filter((s) => {
+      if (dayOffStaffs.includes(s.name)) return false
 
-    if (trainees.length == 0) {
-      // CONFLICTS.cat is a 2D array
-      const conflictCategories = _(CONFLICTS.cat)
-        .filter((pairs) => pairs.includes(cat))
-        .flatten()
-        .filter((c) => c != cat)
-        .value()
+      if (trainees.length == 0) {
+        // CONFLICTS is a 2D array
+        const conflictCategories = _(CONFLICTS)
+          .filter((pairs) => pairs.includes(cat))
+          .flatten()
+          .filter((c) => c != cat)
+          .value()
 
-      const doingConflictedTaskStaffs = assignedTasks.filter((t) => {
-        // check if the staff assigned to any conflict task
-        return t.trainer == s.name && conflictCategories.includes(t.cat)
-      })
+        const doingConflictedTaskStaffs = assignedTasks.filter((t) => {
+          // check if the staff assigned to any conflict task
+          return t.trainer == s.name && conflictCategories.includes(t.cat)
+        })
 
-      if (doingConflictedTaskStaffs.length > 0) {
+        if (doingConflictedTaskStaffs.length > 0) {
+          return false
+        }
+      }
+
+      return s.shift == shift && _.includes(trainers, s.name)
+    })
+    .filter((s) => {
+      const isOnePersonTask = ONE_PERSON_TASKS.includes(cat)
+
+      if (isOnePersonTask) {
+        const assignedOnePersonTasks = assignedTasks.filter(
+          (t) => t.cat == cat && t.shift == shift
+        )
+        if (assignedOnePersonTasks.length == 0) return true
+
+        const found = assignedOnePersonTasks.find((t) => {
+          t.trainer == s.name
+        })
+        if (found) {
+          return true
+        }
+
         return false
       }
-    }
 
-    return s.shift == shift && _.includes(trainers, s.name)
-  })
+      return true
+    })
+    .value()
 }
 
 function assignTrainer(matchedStaffs, workloads) {

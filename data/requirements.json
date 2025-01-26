@@ -1,0 +1,4 @@
+{
+  "onePersonTasks": ["invoice"],
+  "conflicts": [["wire", "recon"]]
+}

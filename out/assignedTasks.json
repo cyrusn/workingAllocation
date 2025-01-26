@@ -1,342 +1,418 @@
-[
-  {
-    "name": "mon",
-    "tasks": {
-      "Winnie": [
+{
+  "EU": {
+    "Simona": {
+      "mon": [
         {
-          "name": "Invoice-Barc/Citi/JPM",
-          "shift": "Asia",
-          "trainer": "Winnie",
+          "name": "Rec & Confirm-Citi/Barc/CB",
+          "shift": "EU",
+          "weekday": "mon",
+          "cat": "recon",
+          "trainer": "Simona",
+          "trainees": []
+        }
+      ],
+      "wed": [
+        {
+          "name": "Rec & Confirm-Citi/Barc/CB",
+          "shift": "EU",
+          "weekday": "wed",
+          "cat": "recon",
+          "trainer": "Simona",
+          "trainees": []
+        }
+      ],
+      "thu": [
+        {
+          "name": "Rec & Confirm-Citi/Barc/CB",
+          "shift": "EU",
+          "weekday": "thu",
+          "cat": "recon",
+          "trainer": "Simona",
+          "trainees": []
+        }
+      ],
+      "fri": [
+        {
+          "name": "Rec & Confirm-Citi/Barc/CB",
+          "shift": "EU",
+          "weekday": "fri",
+          "cat": "recon",
+          "trainer": "Simona",
+          "trainees": []
+        }
+      ]
+    },
+    "Snezhi": {
+      "mon": [
+        {
+          "name": "Invoice-Barc",
+          "shift": "EU",
+          "weekday": "mon",
+          "cat": "invoice",
+          "trainer": "Snezhi",
           "trainees": []
         },
+        {
+          "name": "Wire-Citi/Barc/CB",
+          "shift": "EU",
+          "weekday": "mon",
+          "cat": "wire",
+          "trainer": "Snezhi",
+          "trainees": []
+        }
+      ],
+      "tue": [
+        {
+          "name": "Rec & Confirm-Citi/Barc/CB",
+          "shift": "EU",
+          "weekday": "tue",
+          "cat": "recon",
+          "trainer": "Snezhi",
+          "trainees": []
+        },
+        {
+          "name": "Invoice-Barc",
+          "shift": "EU",
+          "weekday": "tue",
+          "cat": "invoice",
+          "trainer": "Snezhi",
+          "trainees": []
+        }
+      ],
+      "wed": [
+        {
+          "name": "Invoice-Barc",
+          "shift": "EU",
+          "weekday": "wed",
+          "cat": "invoice",
+          "trainer": "Snezhi",
+          "trainees": []
+        },
+        {
+          "name": "Wire-Citi/Barc/CB",
+          "shift": "EU",
+          "weekday": "wed",
+          "cat": "wire",
+          "trainer": "Snezhi",
+          "trainees": []
+        }
+      ],
+      "thu": [
+        {
+          "name": "Invoice-Barc",
+          "shift": "EU",
+          "weekday": "thu",
+          "cat": "invoice",
+          "trainer": "Snezhi",
+          "trainees": []
+        },
+        {
+          "name": "Wire-Citi/Barc/CB",
+          "shift": "EU",
+          "weekday": "thu",
+          "cat": "wire",
+          "trainer": "Snezhi",
+          "trainees": []
+        }
+      ],
+      "fri": [
+        {
+          "name": "Invoice-Barc",
+          "shift": "EU",
+          "weekday": "fri",
+          "cat": "invoice",
+          "trainer": "Snezhi",
+          "trainees": []
+        },
+        {
+          "name": "Wire-Citi/Barc/CB",
+          "shift": "EU",
+          "weekday": "fri",
+          "cat": "wire",
+          "trainer": "Snezhi",
+          "trainees": []
+        }
+      ]
+    }
+  },
+  "Asia": {
+    "Allison": {
+      "mon": [
         {
           "name": "Rec & Confirm-Citi/Barc/JPM",
           "shift": "Asia",
-          "trainer": "Winnie",
-          "trainees": []
-        }
-      ],
-      "Snezhi": [
-        {
-          "name": "Invoice-Barc",
-          "shift": "EU",
-          "trainer": "Snezhi",
-          "trainees": []
-        },
-        {
-          "name": "Rec & Confirm-Citi/Barc/CB",
-          "shift": "EU",
-          "trainer": "Snezhi",
-          "trainees": []
-        }
-      ],
-      "Georgi": [
-        {
-          "name": "Invoice-Barc/Citi/JPM/CB/HDFC",
-          "shift": "US",
-          "trainer": "Georgi",
-          "trainees": ["Winnie"]
-        },
-        {
-          "name": "Rec & Confirm-Citi/Citi/CB",
-          "shift": "US",
-          "trainer": "Georgi",
-          "trainees": []
-        }
-      ],
-      "Allison": [
-        {
-          "name": "Wire-Citi/Barc/JPM",
-          "shift": "Asia",
+          "weekday": "mon",
+          "cat": "recon",
           "trainer": "Allison",
           "trainees": []
         }
       ],
-      "Simona": [
-        {
-          "name": "Wire-Citi/Barc/CB",
-          "shift": "EU",
-          "trainer": "Simona",
-          "trainees": []
-        }
-      ],
-      "Dimitar": [
-        {
-          "name": "Wire-Citi/Citi/CB",
-          "shift": "US",
-          "trainer": "Dimitar",
-          "trainees": []
-        }
-      ]
-    }
-  },
-  {
-    "name": "tue",
-    "tasks": {
-      "Winnie": [
-        {
-          "name": "Invoice-Barc/Citi/JPM",
-          "shift": "Asia",
-          "trainer": "Winnie",
-          "trainees": []
-        },
-        {
-          "name": "Wire-Citi/Barc/JPM",
-          "shift": "Asia",
-          "trainer": "Winnie",
-          "trainees": []
-        }
-      ],
-      "Snezhi": [
-        {
-          "name": "Invoice-Barc",
-          "shift": "EU",
-          "trainer": "Snezhi",
-          "trainees": []
-        },
-        {
-          "name": "Rec & Confirm-Citi/Barc/CB",
-          "shift": "EU",
-          "trainer": "Snezhi",
-          "trainees": []
-        }
-      ],
-      "Dimitar": [
-        {
-          "name": "Invoice-Barc/Citi/JPM/CB/HDFC",
-          "shift": "US",
-          "trainer": "Dimitar",
-          "trainees": ["Winnie"]
-        },
-        {
-          "name": "Rec & Confirm-Citi/Citi/CB",
-          "shift": "US",
-          "trainer": "Dimitar",
-          "trainees": []
-        }
-      ],
-      "Simona": [
-        {
-          "name": "Wire-Citi/Barc/CB",
-          "shift": "EU",
-          "trainer": "Simona",
-          "trainees": []
-        }
-      ],
-      "Georgi": [
-        {
-          "name": "Wire-Citi/Citi/CB",
-          "shift": "US",
-          "trainer": "Georgi",
-          "trainees": []
-        }
-      ]
-    }
-  },
-  {
-    "name": "wed",
-    "tasks": {
-      "Allison": [
-        {
-          "name": "Invoice-Barc/Citi/JPM",
-          "shift": "Asia",
-          "trainer": "Allison",
-          "trainees": []
-        },
-        {
-          "name": "Wire-Citi/Barc/JPM",
-          "shift": "Asia",
-          "trainer": "Allison",
-          "trainees": []
-        }
-      ],
-      "Snezhi": [
-        {
-          "name": "Invoice-Barc",
-          "shift": "EU",
-          "trainer": "Snezhi",
-          "trainees": []
-        },
-        {
-          "name": "Rec & Confirm-Citi/Barc/CB",
-          "shift": "EU",
-          "trainer": "Snezhi",
-          "trainees": []
-        }
-      ],
-      "Georgi": [
-        {
-          "name": "Invoice-Barc/Citi/JPM/CB/HDFC",
-          "shift": "US",
-          "trainer": "Georgi",
-          "trainees": ["Winnie"]
-        },
-        {
-          "name": "Rec & Confirm-Citi/Citi/CB",
-          "shift": "US",
-          "trainer": "Georgi",
-          "trainees": []
-        }
-      ],
-      "Simona": [
-        {
-          "name": "Wire-Citi/Barc/CB",
-          "shift": "EU",
-          "trainer": "Simona",
-          "trainees": []
-        }
-      ],
-      "Dimitar": [
-        {
-          "name": "Wire-Citi/Citi/CB",
-          "shift": "US",
-          "trainer": "Dimitar",
-          "trainees": []
-        }
-      ],
-      "Winnie": [
+      "tue": [
         {
           "name": "Rec & Confirm-Citi/Barc/JPM",
           "shift": "Asia",
-          "trainer": "Winnie",
+          "weekday": "tue",
+          "cat": "recon",
+          "trainer": "Allison",
           "trainees": []
-        }
-      ]
-    }
-  },
-  {
-    "name": "thu",
-    "tasks": {
-      "Allison": [
+        },
         {
           "name": "Invoice-Barc/Citi/JPM",
           "shift": "Asia",
-          "trainer": "Allison",
-          "trainees": []
-        },
-        {
-          "name": "Wire-Citi/Barc/JPM",
-          "shift": "Asia",
+          "weekday": "tue",
+          "cat": "invoice",
           "trainer": "Allison",
           "trainees": []
         }
       ],
-      "Snezhi": [
-        {
-          "name": "Invoice-Barc",
-          "shift": "EU",
-          "trainer": "Snezhi",
-          "trainees": []
-        },
-        {
-          "name": "Rec & Confirm-Citi/Barc/CB",
-          "shift": "EU",
-          "trainer": "Snezhi",
-          "trainees": []
-        }
-      ],
-      "Dimitar": [
-        {
-          "name": "Invoice-Barc/Citi/JPM/CB/HDFC",
-          "shift": "US",
-          "trainer": "Dimitar",
-          "trainees": ["Winnie"]
-        },
-        {
-          "name": "Rec & Confirm-Citi/Citi/CB",
-          "shift": "US",
-          "trainer": "Dimitar",
-          "trainees": []
-        }
-      ],
-      "Simona": [
-        {
-          "name": "Wire-Citi/Barc/CB",
-          "shift": "EU",
-          "trainer": "Simona",
-          "trainees": []
-        }
-      ],
-      "Georgi": [
-        {
-          "name": "Wire-Citi/Citi/CB",
-          "shift": "US",
-          "trainer": "Georgi",
-          "trainees": []
-        }
-      ],
-      "Winnie": [
+      "wed": [
         {
           "name": "Rec & Confirm-Citi/Barc/JPM",
           "shift": "Asia",
+          "weekday": "wed",
+          "cat": "recon",
+          "trainer": "Allison",
+          "trainees": []
+        }
+      ],
+      "thu": [
+        {
+          "name": "Rec & Confirm-Citi/Barc/JPM",
+          "shift": "Asia",
+          "weekday": "thu",
+          "cat": "recon",
+          "trainer": "Allison",
+          "trainees": []
+        },
+        {
+          "name": "Invoice-Barc/Citi/JPM",
+          "shift": "Asia",
+          "weekday": "thu",
+          "cat": "invoice",
+          "trainer": "Allison",
+          "trainees": []
+        }
+      ],
+      "fri": [
+        {
+          "name": "Rec & Confirm-Citi/Barc/JPM",
+          "shift": "Asia",
+          "weekday": "fri",
+          "cat": "recon",
+          "trainer": "Allison",
+          "trainees": []
+        },
+        {
+          "name": "Invoice-Barc/Citi/JPM",
+          "shift": "Asia",
+          "weekday": "fri",
+          "cat": "invoice",
+          "trainer": "Allison",
+          "trainees": []
+        }
+      ]
+    },
+    "Winnie": {
+      "mon": [
+        {
+          "name": "Invoice-Barc/Citi/JPM",
+          "shift": "Asia",
+          "weekday": "mon",
+          "cat": "invoice",
+          "trainer": "Winnie",
+          "trainees": []
+        },
+        {
+          "name": "Wire-Citi/Barc/JPM",
+          "shift": "Asia",
+          "weekday": "mon",
+          "cat": "wire",
+          "trainer": "Winnie",
+          "trainees": []
+        }
+      ],
+      "tue": [
+        {
+          "name": "Wire-Citi/Barc/JPM",
+          "shift": "Asia",
+          "weekday": "tue",
+          "cat": "wire",
+          "trainer": "Winnie",
+          "trainees": []
+        }
+      ],
+      "wed": [
+        {
+          "name": "Invoice-Barc/Citi/JPM",
+          "shift": "Asia",
+          "weekday": "wed",
+          "cat": "invoice",
+          "trainer": "Winnie",
+          "trainees": []
+        },
+        {
+          "name": "Wire-Citi/Barc/JPM",
+          "shift": "Asia",
+          "weekday": "wed",
+          "cat": "wire",
+          "trainer": "Winnie",
+          "trainees": []
+        }
+      ],
+      "thu": [
+        {
+          "name": "Wire-Citi/Barc/JPM",
+          "shift": "Asia",
+          "weekday": "thu",
+          "cat": "wire",
           "trainer": "Winnie",
           "trainees": []
         }
       ]
     }
   },
-  {
-    "name": "fri",
-    "tasks": {
-      "Allison": [
-        {
-          "name": "Invoice-Barc/Citi/JPM",
-          "shift": "Asia",
-          "trainer": "Allison",
-          "trainees": []
-        },
-        {
-          "name": "Wire-Citi/Barc/JPM",
-          "shift": "Asia",
-          "trainer": "Allison",
-          "trainees": []
-        }
-      ],
-      "Snezhi": [
-        {
-          "name": "Invoice-Barc",
-          "shift": "EU",
-          "trainer": "Snezhi",
-          "trainees": []
-        },
-        {
-          "name": "Rec & Confirm-Citi/Barc/CB",
-          "shift": "EU",
-          "trainer": "Snezhi",
-          "trainees": []
-        }
-      ],
-      "Georgi": [
+  "US": {
+    "Dimitar": {
+      "mon": [
         {
           "name": "Invoice-Barc/Citi/JPM/CB/HDFC",
           "shift": "US",
-          "trainer": "Georgi",
-          "trainees": ["Winnie"]
+          "weekday": "mon",
+          "cat": "invoice",
+          "trainer": "Dimitar",
+          "trainees": []
         },
         {
           "name": "Rec & Confirm-Citi/Citi/CB",
           "shift": "US",
+          "weekday": "mon",
+          "cat": "recon",
+          "trainer": "Dimitar",
+          "trainees": []
+        }
+      ],
+      "tue": [
+        {
+          "name": "Invoice-Barc/Citi/JPM/CB/HDFC",
+          "shift": "US",
+          "weekday": "tue",
+          "cat": "invoice",
+          "trainer": "Dimitar",
+          "trainees": [
+            "Georgi"
+          ]
+        },
+        {
+          "name": "Wire-Citi/Citi/CB",
+          "shift": "US",
+          "weekday": "tue",
+          "cat": "wire",
+          "trainer": "Dimitar",
+          "trainees": []
+        }
+      ],
+      "wed": [
+        {
+          "name": "Invoice-Barc/Citi/JPM/CB/HDFC",
+          "shift": "US",
+          "weekday": "wed",
+          "cat": "invoice",
+          "trainer": "Dimitar",
+          "trainees": [
+            "Georgi"
+          ]
+        },
+        {
+          "name": "Wire-Citi/Citi/CB",
+          "shift": "US",
+          "weekday": "wed",
+          "cat": "wire",
+          "trainer": "Dimitar",
+          "trainees": []
+        }
+      ],
+      "thu": [
+        {
+          "name": "Invoice-Barc/Citi/JPM/CB/HDFC",
+          "shift": "US",
+          "weekday": "thu",
+          "cat": "invoice",
+          "trainer": "Dimitar",
+          "trainees": [
+            "Georgi"
+          ]
+        },
+        {
+          "name": "Wire-Citi/Citi/CB",
+          "shift": "US",
+          "weekday": "thu",
+          "cat": "wire",
+          "trainer": "Dimitar",
+          "trainees": []
+        }
+      ],
+      "fri": [
+        {
+          "name": "Invoice-Barc/Citi/JPM/CB/HDFC",
+          "shift": "US",
+          "weekday": "fri",
+          "cat": "invoice",
+          "trainer": "Dimitar",
+          "trainees": [
+            "Georgi"
+          ]
+        },
+        {
+          "name": "Wire-Citi/Citi/CB",
+          "shift": "US",
+          "weekday": "fri",
+          "cat": "wire",
+          "trainer": "Dimitar",
+          "trainees": []
+        }
+      ]
+    },
+    "Georgi": {
+      "tue": [
+        {
+          "name": "Rec & Confirm-Citi/Citi/CB",
+          "shift": "US",
+          "weekday": "tue",
+          "cat": "recon",
           "trainer": "Georgi",
           "trainees": []
         }
       ],
-      "Simona": [
+      "wed": [
         {
-          "name": "Wire-Citi/Barc/CB",
-          "shift": "EU",
-          "trainer": "Simona",
+          "name": "Rec & Confirm-Citi/Citi/CB",
+          "shift": "US",
+          "weekday": "wed",
+          "cat": "recon",
+          "trainer": "Georgi",
           "trainees": []
         }
       ],
-      "Dimitar": [
+      "thu": [
         {
-          "name": "Wire-Citi/Citi/CB",
+          "name": "Rec & Confirm-Citi/Citi/CB",
           "shift": "US",
-          "trainer": "Dimitar",
+          "weekday": "thu",
+          "cat": "recon",
+          "trainer": "Georgi",
+          "trainees": []
+        }
+      ],
+      "fri": [
+        {
+          "name": "Rec & Confirm-Citi/Citi/CB",
+          "shift": "US",
+          "weekday": "fri",
+          "cat": "recon",
+          "trainer": "Georgi",
           "trainees": []
         }
       ]
     }
   }
-]
-
+}
