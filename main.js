@@ -36,6 +36,7 @@ schedules.forEach((schedule) => {
     shifts.forEach(function (shift) {
       const matchedTrainers = getMatchedTrainers(
         {
+          name,
           cat,
           shift,
           trainers,
@@ -67,7 +68,7 @@ schedules.forEach((schedule) => {
     })
   })
 
-  schedule.tasks = assignedTasks
+  schedule.tasks = _.sortBy(assignedTasks, ['shift', 'staff', 'cat', 'name'])
 })
 
 console.log(workloads)
@@ -177,12 +178,9 @@ function getMatchedTrainers(task, assignedTasks, dayOffStaffs) {
         )
         if (assignedOnePersonTasks.length == 0) return true
 
-        const found = assignedOnePersonTasks.find((t) => {
-          t.trainer == s.name
-        })
-        if (found) {
-          return true
-        }
+        const found = assignedOnePersonTasks.find((t) => t.trainer == s.name)
+
+        if (found) return true
 
         return false
       }

@@ -1,6 +1,15 @@
 [
   {
-    "name": "Invoice-Barc/Citi/JPM",
+    "name": "Invoice-Citi/JPM",
+    "cat": "invoice",
+    "trainers": ["Winnie", "Allison"],
+    "trainees": [],
+    "shifts": ["Asia"],
+    "weekdays": ["mon", "tue", "wed", "thu", "fri"],
+    "duration": 1.5
+  },
+  {
+    "name": "Invoice-Barc",
     "cat": "invoice",
     "trainers": ["Winnie", "Allison"],
     "trainees": [],
