@@ -30,7 +30,7 @@
         </tr>
         <template x-for="shift in shifts">
           <template x-if="tasks[shift]">
-            <template x-for="staff in Object.keys(tasks[shift])">
+            <template x-for="staff in Object.keys(tasks[shift]).sort()">
               <tr>
                 <td x-text="shift"></td>
                 <td x-text="staff"></td>
