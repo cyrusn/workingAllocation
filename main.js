@@ -71,8 +71,9 @@ schedules.forEach((schedule) => {
   schedule.tasks = _.sortBy(assignedTasks, ['shift', 'staff', 'cat', 'name'])
 })
 
-console.log(workloads)
-console.log(unassignedTasks)
+console.log('# Workloads:\n', workloads)
+console.log('\n')
+console.log('# Unassigned Tasks:\n', unassignedTasks)
 
 const flattenTasks = _.reduce(
   schedules,
