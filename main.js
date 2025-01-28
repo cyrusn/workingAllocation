@@ -95,35 +95,17 @@ const result = _(flattenTasks)
   })
   .value()
 
-fs.writeFileSync(
-  './out/assignedTasks.json',
-  JSON.stringify(result, null, 2),
-  'utf8'
-)
+const writeFileData = [
+  { filename: './out/assignedTasks.json', content: result },
+  { filename: './out/traineeTasks.json', content: traineeTasks },
+  { filename: './out/workloads.json', content: workloads },
+  { filename: './out/unassignedTasks.json', content: unassignedTasks },
+  { filename: './out/dayOffs.json', content: UNAVAILABLES }
+]
 
-fs.writeFileSync(
-  './out/traineeTasks.json',
-  JSON.stringify(traineeTasks, null, 2),
-  'utf8'
-)
-
-fs.writeFileSync(
-  './out/workload.json',
-  JSON.stringify(workloads, null, 2),
-  'utf8'
-)
-
-fs.writeFileSync(
-  './out/unassignedTasks.json',
-  JSON.stringify(unassignedTasks, null, 2),
-  'utf8'
-)
-
-fs.writeFileSync(
-  './out/dayOff.json',
-  JSON.stringify(UNAVAILABLES, null, 2),
-  'utf8'
-)
+writeFileData.forEach(({ filename, content }) => {
+  fs.writeFileSync(filename, JSON.stringify(content, null, 2), 'utf8')
+})
 
 function getMatchedTrainers(task, assignedTasks, dayOffStaffs) {
   const { name, cat, shift, trainers, trainees } = task
