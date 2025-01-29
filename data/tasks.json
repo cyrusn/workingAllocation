@@ -2,32 +2,23 @@
   {
     "name": "Invoice-Citi/JPM",
     "cat": "invoice",
-    "trainers": ["Winnie", "Allison"],
+    "trainers": ["Winnie", "Allison", "Dimitar"],
     "trainees": [],
-    "shifts": ["Asia"],
+    "shifts": ["Asia", "US"],
     "weekdays": ["mon", "tue", "wed", "thu", "fri"],
     "duration": 1.5
   },
   {
     "name": "Invoice-Barc",
     "cat": "invoice",
-    "trainers": ["Winnie", "Allison"],
+    "trainers": ["Winnie", "Allison", "Dimitar", "Snezhi"],
     "trainees": [],
-    "shifts": ["Asia"],
+    "shifts": ["Asia", "US", "EU"],
     "weekdays": ["mon", "tue", "wed", "thu", "fri"],
     "duration": 1.5
   },
   {
-    "name": "Invoice-Barc",
-    "cat": "invoice",
-    "trainers": ["Snezhi"],
-    "trainees": [],
-    "shifts": ["EU"],
-    "weekdays": ["mon", "tue", "wed", "thu", "fri"],
-    "duration": 0.5
-  },
-  {
-    "name": "Invoice-Barc/Citi/JPM/CB/HDFC",
+    "name": "Invoice-CB/HDFC",
     "cat": "invoice",
     "trainers": ["Dimitar"],
     "trainees": ["Georgi"],

@@ -10,7 +10,8 @@ const PREASSIGNED_TASKS = require('./data/preassigned.json')
 const CONFLICTS = REQUIREMENTS.conflicts
 const ONE_PERSON_TASKS = REQUIREMENTS.onePersonTasks
 
-const workloads = STAFFS.map(({ name }) => ({
+const workloads = STAFFS.map(({ name, shift }) => ({
+  shift,
   name,
   workload: 0
 }))
@@ -71,7 +72,7 @@ schedules.forEach((schedule) => {
   schedule.tasks = _.sortBy(assignedTasks, ['shift', 'staff', 'cat', 'name'])
 })
 
-console.log('# Workloads:\n', workloads)
+console.log('# Workloads:\n', _.sortBy(workloads, ['shift', 'name']))
 console.log('\n')
 console.log('# Unassigned Tasks:\n', unassignedTasks)
 
@@ -149,19 +150,19 @@ function getMatchedTrainers(task, assignedTasks, dayOffStaffs) {
           return false
         }
       }
-
       return s.shift == shift && _.includes(trainers, s.name)
     })
     .filter((s) => {
       const isOnePersonTask = ONE_PERSON_TASKS.includes(cat)
-
       if (isOnePersonTask) {
-        const assignedOnePersonTasks = assignedTasks.filter(
-          (t) => t.cat == cat && t.shift == shift
-        )
+        const assignedOnePersonTasks = assignedTasks.filter((t) => {
+          return t.cat == cat && t.shift == s.shift
+        })
         if (assignedOnePersonTasks.length == 0) return true
 
-        const found = assignedOnePersonTasks.find((t) => t.trainer == s.name)
+        const found = assignedOnePersonTasks.find(
+          (t) => t.trainer == s.name && t.shift == s.shift
+        )
 
         if (found) return true
 
