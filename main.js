@@ -52,8 +52,8 @@ schedules.forEach((schedule) => {
           weekday,
           name,
           shift,
-          trainers: getStaffs(trainers, shift),
-          trainees: getStaffs(trainees, shift)
+          trainers: _.map(getListShiftStaffs(trainers, shift), 'name'),
+          trainees: _.map(getListShiftStaffs(trainees, shift), 'name')
         })
         return
       }
@@ -218,8 +218,8 @@ function updateWorkloads(staffs, duration) {
   })
 }
 
-function getStaffs(list, shift) {
+function getListShiftStaffs(list, shift) {
   return _.filter(STAFFS, (s) => {
     return s.shift == shift && list.includes(s.name)
-  }).map((s) => s.name)
+  })
 }

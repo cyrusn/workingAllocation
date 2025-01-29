@@ -100,17 +100,25 @@
         unassignedTasks: [],
         dayOffs: [],
         async init() {
-          const response = await fetch('./assignedSchedules.json')
-          const schedules = await response.json()
+          const ts = Date.now()
+
+          const scheduleResponse = await fetch(
+            `./assignedSchedules.json?ts=${ts}`
+          )
+          const schedules = await scheduleResponse.json()
           this.schedules = schedules
 
-          const traineeResponse = await fetch('./traineeSchedules.json')
+          const traineeResponse = await fetch(
+            `./traineeSchedules.json?ts=${ts}`
+          )
           this.traineeSchedules = await traineeResponse.json()
 
-          const unassignedResponse = await fetch('./unassignedTasks.json')
+          const unassignedResponse = await fetch(
+            `./unassignedTasks.json?ts=${ts}`
+          )
           this.unassignedTasks = await unassignedResponse.json()
 
-          const dayOffResponse = await fetch('./dayOffs.json')
+          const dayOffResponse = await fetch(`./dayOffs.json?ts=${ts}`)
           this.dayOffs = await dayOffResponse.json()
         },
         getTrainingSection({ staffName, weekday }) {
