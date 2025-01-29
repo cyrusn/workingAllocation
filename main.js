@@ -28,7 +28,7 @@ const unassignedTasks = []
 
 schedules.forEach((schedule) => {
   const weekday = schedule.name
-  const assignedTasks = []
+  const assignedSchedules = []
 
   TASKS.filter(({ weekdays }) => weekdays.includes(weekday)).forEach((task) => {
     const { name, cat, trainers, trainees, shifts, duration } = task
@@ -43,12 +43,18 @@ schedules.forEach((schedule) => {
           trainers,
           trainees
         },
-        assignedTasks,
+        assignedSchedules,
         dayOffStaffs
       )
 
       if (matchedTrainers.length == 0) {
-        unassignedTasks.push({ weekday, name, shift })
+        unassignedTasks.push({
+          weekday,
+          name,
+          shift,
+          trainers: getStaffs(trainers, shift),
+          trainees: getStaffs(trainees, shift)
+        })
         return
       }
 
@@ -58,7 +64,7 @@ schedules.forEach((schedule) => {
 
       updateWorkloads([assignedTrainer, ...workingTrainees], duration)
 
-      assignedTasks.push({
+      assignedSchedules.push({
         name,
         shift,
         weekday,
@@ -69,14 +75,19 @@ schedules.forEach((schedule) => {
     })
   })
 
-  schedule.tasks = _.sortBy(assignedTasks, ['shift', 'staff', 'cat', 'name'])
+  schedule.tasks = _.sortBy(assignedSchedules, [
+    'shift',
+    'staff',
+    'cat',
+    'name'
+  ])
 })
 
 console.log('# Workloads:\n', _.sortBy(workloads, ['shift', 'name']))
 console.log('\n')
 console.log('# Unassigned Tasks:\n', unassignedTasks)
 
-const flattenTasks = _.reduce(
+const flattenSchedules = _.reduce(
   schedules,
   (prev, task) => {
     prev.push(...task.tasks)
@@ -84,9 +95,11 @@ const flattenTasks = _.reduce(
   },
   []
 )
-const traineeTasks = flattenTasks.filter(({ trainees }) => trainees.length > 0)
+const traineeSchedules = flattenSchedules.filter(
+  ({ trainees }) => trainees.length > 0
+)
 
-const result = _(flattenTasks)
+const result = _(flattenSchedules)
   .groupBy('shift')
   .mapValues((task) => {
     const groupedTasks = _.groupBy(task, 'trainer')
@@ -98,8 +111,8 @@ const result = _(flattenTasks)
   .value()
 
 const writeFileData = [
-  { filename: './out/assignedTasks.json', content: result },
-  { filename: './out/traineeTasks.json', content: traineeTasks },
+  { filename: './out/assignedSchedules.json', content: result },
+  { filename: './out/traineeSchedules.json', content: traineeSchedules },
   { filename: './out/workloads.json', content: workloads },
   { filename: './out/unassignedTasks.json', content: unassignedTasks },
   { filename: './out/dayOffs.json', content: UNAVAILABLES }
@@ -129,49 +142,51 @@ function getMatchedTrainers(task, assignedTasks, dayOffStaffs) {
 
   if (preassignedStaffs.length > 0) return preassignedStaffs
 
-  return _(STAFFS)
-    .filter((s) => {
-      if (dayOffStaffs.includes(s.name)) return false
+  const matchedStaffs = _.filter(STAFFS, (s) => {
+    if (dayOffStaffs.includes(s.name)) return false
 
-      if (trainees.length == 0) {
-        // CONFLICTS is a 2D array
-        const conflictCategories = _(CONFLICTS)
-          .filter((pairs) => pairs.includes(cat))
-          .flatten()
-          .filter((c) => c != cat)
-          .value()
+    if (trainees.length == 0) {
+      // CONFLICTS is a 2D array
+      const conflictCategories = _(CONFLICTS)
+        .filter((pairs) => pairs.includes(cat))
+        .flatten()
+        .filter((c) => c != cat)
+        .value()
 
-        const doingConflictedTaskStaffs = assignedTasks.filter((t) => {
-          // check if the staff assigned to any conflict task
-          return t.trainer == s.name && conflictCategories.includes(t.cat)
-        })
+      const doingConflictedTaskStaffs = assignedTasks.filter((t) => {
+        // check if the staff assigned to any conflict task
+        return t.trainer == s.name && conflictCategories.includes(t.cat)
+      })
 
-        if (doingConflictedTaskStaffs.length > 0) {
-          return false
-        }
-      }
-      return s.shift == shift && _.includes(trainers, s.name)
-    })
-    .filter((s) => {
-      const isOnePersonTask = ONE_PERSON_TASKS.includes(cat)
-      if (isOnePersonTask) {
-        const assignedOnePersonTasks = assignedTasks.filter((t) => {
-          return t.cat == cat && t.shift == s.shift
-        })
-        if (assignedOnePersonTasks.length == 0) return true
-
-        const found = assignedOnePersonTasks.find(
-          (t) => t.trainer == s.name && t.shift == s.shift
-        )
-
-        if (found) return true
-
+      if (doingConflictedTaskStaffs.length > 0) {
         return false
       }
+    }
+    return s.shift == shift && _.includes(trainers, s.name)
+  })
 
-      return true
-    })
-    .value()
+  const assignedOnePersonTaskStaffs = _.filter(matchedStaffs, (s) => {
+    const isOnePersonTask = ONE_PERSON_TASKS.includes(cat)
+    if (isOnePersonTask) {
+      const assignedOnePersonTasks = assignedTasks.filter((t) => {
+        return t.cat == cat && t.shift == s.shift
+      })
+      if (assignedOnePersonTasks.length == 0) return true
+
+      const found = assignedOnePersonTasks.find(
+        (t) => t.trainer == s.name && t.shift == s.shift
+      )
+
+      if (found) return true
+
+      return false
+    }
+
+    return true
+  })
+
+  if (assignedOnePersonTaskStaffs.length > 0) return assignedOnePersonTaskStaffs
+  return matchedStaffs
 }
 
 function assignTrainer(matchedStaffs, workloads) {
@@ -201,4 +216,10 @@ function updateWorkloads(staffs, duration) {
       found.workload += duration
     }
   })
+}
+
+function getStaffs(list, shift) {
+  return _.filter(STAFFS, (s) => {
+    return s.shift == shift && list.includes(s.name)
+  }).map((s) => s.name)
 }
