@@ -52,8 +52,8 @@ schedules.forEach((schedule) => {
           weekday,
           name,
           shift,
-          trainers: _.map(getListShiftStaffs(trainers, shift), 'name'),
-          trainees: _.map(getListShiftStaffs(trainees, shift), 'name')
+          trainers: _.map(getStaffsInListByShift(trainers, shift), 'name'),
+          trainees: _.map(getStaffsInListByShift(trainees, shift), 'name')
         })
         return
       }
@@ -142,7 +142,9 @@ function getMatchedTrainers(task, assignedTasks, dayOffStaffs) {
 
   if (preassignedStaffs.length > 0) return preassignedStaffs
 
-  const matchedStaffs = _.filter(STAFFS, (s) => {
+  const shiftTrainers = getStaffsInListByShift(trainers, shift)
+
+  const matchedStaffs = _.filter(shiftTrainers, (s) => {
     if (dayOffStaffs.includes(s.name)) return false
 
     if (trainees.length == 0) {
@@ -162,7 +164,7 @@ function getMatchedTrainers(task, assignedTasks, dayOffStaffs) {
         return false
       }
     }
-    return s.shift == shift && _.includes(trainers, s.name)
+    return true
   })
 
   const assignedOnePersonTaskStaffs = _.filter(matchedStaffs, (s) => {
@@ -218,7 +220,7 @@ function updateWorkloads(staffs, duration) {
   })
 }
 
-function getListShiftStaffs(list, shift) {
+function getStaffsInListByShift(list, shift) {
   return _.filter(STAFFS, (s) => {
     return s.shift == shift && list.includes(s.name)
   })
