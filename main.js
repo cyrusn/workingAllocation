@@ -70,7 +70,7 @@ schedules.forEach((schedule) => {
         weekday,
         cat,
         trainer: assignedTrainer.name,
-        trainees: assignedTrainees
+        trainees: _.map(assignedTrainees, 'name')
       })
     })
   })
