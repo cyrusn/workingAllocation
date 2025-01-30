@@ -63,27 +63,56 @@
     </section>
 
     <section class="section">
-      <h1 class="title">Unassigned Tasks</h1>
-      <table class="table is-bordered is-striped is-narrow is-hoverable">
-        <tr>
-          <th>Weekday</th>
-          <th>Shift</th>
-          <th>Task</th>
-          <th>Trainers</th>
-          <th>Trainees</th>
-        </tr>
-        <template x-for="task in unassignedTasks">
-          <tr>
-            <td
-              x-text="task.weekday.charAt(0).toUpperCase() + task.weekday.substring(1)"
-            ></td>
-            <td x-text="task.shift"></td>
-            <td x-text="task.name"></td>
-            <td x-text="task.trainers.join(', ')"></td>
-            <td x-text="task.trainees.join(', ')"></td>
-          </tr>
-        </template>
-      </table>
+      <div class="level">
+        <div class="level-item">
+          <div>
+            <h1 class="title">Unassigned Tasks</h1>
+            <table
+              class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+            >
+              <tr>
+                <th>Weekday</th>
+                <th>Shift</th>
+                <th>Task</th>
+                <th>Trainers</th>
+                <th>Trainees</th>
+              </tr>
+              <template x-for="task in unassignedTasks">
+                <tr>
+                  <td
+                    x-text="task.weekday.charAt(0).toUpperCase() + task.weekday.substring(1)"
+                  ></td>
+                  <td x-text="task.shift"></td>
+                  <td x-text="task.name"></td>
+                  <td x-text="task.trainers.join(', ')"></td>
+                  <td x-text="task.trainees.join(', ')"></td>
+                </tr>
+              </template>
+            </table>
+          </div>
+        </div>
+        <div class="level-item">
+          <div>
+            <h1 class="title">Workloads</h1>
+            <table
+              class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+            >
+              <tr>
+                <th>Shift</th>
+                <th>Staff</th>
+                <th>Workload</th>
+              </tr>
+              <template x-for="w in workloads">
+                <tr>
+                  <td x-text="w.shift"></td>
+                  <td x-text="w.name"></td>
+                  <td x-text="w.workload"></td>
+                </tr>
+              </template>
+            </table>
+          </div>
+        </div>
+      </div>
     </section>
   </body>
   <script>
@@ -95,6 +124,7 @@
         weekdays: ['mon', 'tue', 'wed', 'thu', 'fri'],
         traineeSchedules: [],
         unassignedTasks: [],
+        workloads: [],
         dayOffs: [],
         async init() {
           const ts = Date.now()
@@ -114,6 +144,9 @@
             `./unassignedTasks.json?ts=${ts}`
           )
           this.unassignedTasks = await unassignedResponse.json()
+
+          const workloadResponse = await fetch(`./workloads.json?ts=${ts}`)
+          this.workloads = await workloadResponse.json()
 
           const dayOffResponse = await fetch(`./dayOffs.json?ts=${ts}`)
           this.dayOffs = await dayOffResponse.json()
