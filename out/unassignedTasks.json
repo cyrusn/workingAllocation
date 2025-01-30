@@ -1,17 +1,41 @@
 [
   {
     "weekday": "mon",
-    "name": "Rec & Confirm-Citi/Citi/CB",
-    "shift": "US"
+    "name": "Wire-Citi/Citi/CB",
+    "shift": "US",
+    "trainers": [
+      "Dimitar",
+      "Georgi"
+    ],
+    "trainees": []
+  },
+  {
+    "weekday": "mon",
+    "name": "Invoice-Barc",
+    "shift": "US",
+    "trainers": [
+      "Georgi"
+    ],
+    "trainees": []
   },
   {
     "weekday": "tue",
-    "name": "Rec & Confirm-Citi/Barc/CB",
-    "shift": "EU"
+    "name": "Wire-Citi/Barc/CB",
+    "shift": "EU",
+    "trainers": [
+      "Snezhi",
+      "Simona"
+    ],
+    "trainees": []
   },
   {
     "weekday": "fri",
     "name": "Rec & Confirm-Citi/Barc/JPM",
-    "shift": "Asia"
+    "shift": "Asia",
+    "trainers": [
+      "Winnie",
+      "Allison"
+    ],
+    "trainees": []
   }
 ]

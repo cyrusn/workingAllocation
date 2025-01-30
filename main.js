@@ -207,16 +207,14 @@ function assignTaskToTrainer(availableStaffs, workloads) {
     },
     ['asc']
   )
-  if (sorted.length > 1) {
-    console.log(sorted, _.sortBy(workloads, ['shift', 'name']))
-  }
   return sorted[0]
 }
 
 function assignTaskToTrainees(trainees, dayOffStaffs) {
-  return _.filter(trainees, function (trainee) {
+  const traineeNames = _.filter(trainees, function (trainee) {
     return !dayOffStaffs.includes(trainee)
   })
+  return _.filter(STAFFS, (s) => traineeNames.includes(s.name))
 }
 
 function updateWorkloads(staffs, duration) {
