@@ -113,7 +113,10 @@ const result = _(flattenSchedules)
 const writeFileData = [
   { filename: './out/assignedSchedules.json', content: result },
   { filename: './out/traineeSchedules.json', content: traineeSchedules },
-  { filename: './out/workloads.json', content: workloads },
+  {
+    filename: './out/workloads.json',
+    content: _.sortBy(workloads, ['shift', 'name'])
+  },
   { filename: './out/unassignedTasks.json', content: unassignedTasks },
   { filename: './out/dayOffs.json', content: UNAVAILABLES }
 ]

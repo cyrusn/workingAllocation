@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "node ./main.js",
-    "serve": "npx http-server ./out/ -p 6612"
+    "serve": "npx http-server ./out/ -p 6612 -c-1 -o"
   },
   "dependencies": {
     "http-server": "^14.1.1",
