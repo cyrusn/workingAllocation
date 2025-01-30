@@ -35,7 +35,7 @@ schedules.forEach((schedule) => {
     const dayOffStaffs = UNAVAILABLES[weekday] || []
 
     shifts.forEach(function (shift) {
-      const matchedTrainers = getMatchedTrainers(
+      const availableTrainers = getAvailableTrainers(
         {
           name,
           cat,
@@ -47,7 +47,7 @@ schedules.forEach((schedule) => {
         dayOffStaffs
       )
 
-      if (matchedTrainers.length == 0) {
+      if (availableTrainers.length == 0) {
         unassignedTasks.push({
           weekday,
           name,
@@ -58,11 +58,11 @@ schedules.forEach((schedule) => {
         return
       }
 
-      const assignedTrainer = assignTrainer(matchedTrainers, workloads)
+      const assignedTrainer = assignTaskToTrainer(availableTrainers, workloads)
 
-      const workingTrainees = assignTaskToTrainees(trainees, dayOffStaffs)
+      const assignedTrainees = assignTaskToTrainees(trainees, dayOffStaffs)
 
-      updateWorkloads([assignedTrainer, ...workingTrainees], duration)
+      updateWorkloads([assignedTrainer, ...assignedTrainees], duration)
 
       assignedSchedules.push({
         name,
@@ -70,7 +70,7 @@ schedules.forEach((schedule) => {
         weekday,
         cat,
         trainer: assignedTrainer.name,
-        trainees: workingTrainees
+        trainees: assignedTrainees
       })
     })
   })
@@ -122,7 +122,7 @@ writeFileData.forEach(({ filename, content }) => {
   fs.writeFileSync(filename, JSON.stringify(content, null, 2), 'utf8')
 })
 
-function getMatchedTrainers(task, assignedTasks, dayOffStaffs) {
+function getAvailableTrainers(task, assignedTasks, dayOffStaffs) {
   const { name, cat, shift, trainers, trainees } = task
 
   const preassignedStaffs = _(STAFFS)
@@ -191,9 +191,10 @@ function getMatchedTrainers(task, assignedTasks, dayOffStaffs) {
   return matchedStaffs
 }
 
-function assignTrainer(matchedStaffs, workloads) {
-  return _.sortBy(
-    matchedStaffs,
+function assignTaskToTrainer(availableStaffs, workloads) {
+  // workload: name shift workload
+  const sorted = _.sortBy(
+    availableStaffs,
     function (s) {
       const found = workloads.find((w) => w.name == s.name)
       if (found) {
@@ -201,8 +202,12 @@ function assignTrainer(matchedStaffs, workloads) {
       }
       return 0
     },
-    ['desc']
-  )[0]
+    ['asc']
+  )
+  if (sorted.length > 1) {
+    console.log(sorted, _.sortBy(workloads, ['shift', 'name']))
+  }
+  return sorted[0]
 }
 
 function assignTaskToTrainees(trainees, dayOffStaffs) {
