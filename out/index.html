@@ -93,34 +93,34 @@
         </tr>
         <template x-for="shift in shifts">
           <template x-if="schedules[shift]">
-            <template
-              x-for="staff in filterStaffs(Object.keys(schedules[shift]))"
-            >
-              <tr>
-                <td x-text="shift"></td>
-                <td x-text="staff"></td>
-                <template x-for="weekday in weekdays">
-                  <td class="content">
-                    <ul>
-                      <template
-                        x-for="schedule in filterSchedules(schedules[shift][staff][weekday])"
-                      >
-                        <li x-text="schedule.name"></li>
-                      </template>
-                      <template
-                        x-for="schedule in getTrainingSection({staffName: staff, weekday})"
-                      >
-                        <li x-text="`#${schedule.name}`"></li>
-                      </template>
-                      <template x-for="dayoffStaff in dayOffs[weekday]">
-                        <template x-if="dayoffStaff == staff">
-                          <li class="has-text-danger">Day Off</li>
+            <template x-for="staff in staffs">
+              <template x-if="staff.shift == shift">
+                <tr>
+                  <td x-text="shift"></td>
+                  <td x-text="staff.name"></td>
+                  <template x-for="weekday in weekdays">
+                    <td class="content">
+                      <ul>
+                        <template
+                          x-for="schedule in filterSchedules(schedules[shift][staff.name][weekday])"
+                        >
+                          <li x-text="schedule.name"></li>
                         </template>
-                      </template>
-                    </ul>
-                  </td>
-                </template>
-              </tr>
+                        <template
+                          x-for="schedule in getTrainingSection({staffName: staff, weekday})"
+                        >
+                          <li x-text="`#${schedule.name}`"></li>
+                        </template>
+                        <template x-for="dayoffStaff in dayOffs[weekday]">
+                          <template x-if="dayoffStaff == staff.name">
+                            <li class="has-text-danger">Day Off</li>
+                          </template>
+                        </template>
+                      </ul>
+                    </td>
+                  </template>
+                </tr>
+              </template>
             </template>
           </template>
         </template>
