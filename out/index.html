@@ -14,8 +14,71 @@
     />
   </head>
   <body x-data="data">
+    <section class="section mb-4 pb-0">
+      <h1 class="title">Filters</h1>
+      <!--<pre x-text='JSON.stringify(filters, "null", "\t")'></pre>-->
+      <form class="mb-5">
+        <div class="field is-horizontal">
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <div class="select is-fullwidth is-multiple">
+                  <select x-model="filters.shifts" multiple size="3">
+                    <template x-for="s in data.shifts">
+                      <option x-text="s"></option>
+                    </template>
+                  </select>
+                </div>
+                <span class="help has-text-link">Filter by Shift</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="control">
+                <div class="select is-fullwidth is-multiple">
+                  <select x-model="filters.staffs" multiple>
+                    <template x-for="s in data.staffs">
+                      <option x-text="s"></option>
+                    </template>
+                  </select>
+                </div>
+
+                <span class="help has-text-link">Filter by staffs</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="control">
+                <div class="select is-fullwidth is-multiple">
+                  <select x-model="filters.cats" multiple>
+                    <template x-for="c in data.cats">
+                      <option x-text="c"></option>
+                    </template>
+                  </select>
+                </div>
+                <span class="help has-text-link">Filter by Category</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <p class="control is-expanded">
+                <input
+                  class="input"
+                  type="text"
+                  placeholder="Task"
+                  x-model="filters.task"
+                />
+              </p>
+
+              <span class="help has-text-link">Filter by Task</span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </section>
     <section class="section">
       <h1 class="title">Schedules</h1>
+
       <table
         class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
       >
@@ -30,7 +93,9 @@
         </tr>
         <template x-for="shift in shifts">
           <template x-if="schedules[shift]">
-            <template x-for="staff in Object.keys(schedules[shift]).sort()">
+            <template
+              x-for="staff in filterStaffs(Object.keys(schedules[shift]))"
+            >
               <tr>
                 <td x-text="shift"></td>
                 <td x-text="staff"></td>
@@ -38,7 +103,7 @@
                   <td class="content">
                     <ul>
                       <template
-                        x-for="schedule in schedules[shift][staff][weekday]"
+                        x-for="schedule in filterSchedules(schedules[shift][staff][weekday])"
                       >
                         <li x-text="schedule.name"></li>
                       </template>
@@ -56,6 +121,40 @@
                   </td>
                 </template>
               </tr>
+            </template>
+          </template>
+        </template>
+      </table>
+    </section>
+
+    <section class="section">
+      <h1 class="title">Tasks by Trainers</h1>
+      <table
+        class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+      >
+        <tr>
+          <td>Shift</td>
+          <td>Staff</td>
+          <td>Tasks</td>
+        </tr>
+        <template x-for="shift in shifts">
+          <template x-for="staff in staffs">
+            <template x-if="staff.shift == shift">
+              <template
+                x-if="filters.staffs ==0 ||filters.staffs.includes(staff.name)"
+              >
+                <tr>
+                  <td x-text="shift"></td>
+                  <td x-text="staff.name"></td>
+                  <td class="content">
+                    <ul>
+                      <template x-for="t in getTasksByStaff(staff.name)">
+                        <li x-text="t.name"></li>
+                      </template>
+                    </ul>
+                  </td>
+                </tr>
+              </template>
             </template>
           </template>
         </template>
@@ -118,16 +217,19 @@
   <script>
     document.addEventListener('alpine:init', () => {
       Alpine.data('data', () => ({
+        tasks: [],
         staffs: [],
         schedules: [],
-        shifts: ['Asia', 'EU', 'US'],
         weekdays: ['mon', 'tue', 'wed', 'thu', 'fri'],
         traineeSchedules: [],
         unassignedTasks: [],
         workloads: [],
         dayOffs: [],
+        filters: { staffs: [], shifts: [], cats: [], task: '' },
         async init() {
           const ts = Date.now()
+          const taskResponse = await fetch(`./tasks.json?ts=${ts}`)
+          this.tasks = await taskResponse.json()
 
           const scheduleResponse = await fetch(
             `./assignedSchedules.json?ts=${ts}`
@@ -150,6 +252,44 @@
 
           const dayOffResponse = await fetch(`./dayOffs.json?ts=${ts}`)
           this.dayOffs = await dayOffResponse.json()
+
+          const staffResponse = await fetch(`./staffs.json?ts=${ts}`)
+          this.staffs = await staffResponse.json()
+        },
+
+        get data() {
+          const { schedules, filters } = this
+          const shiftFilters = this.filters.shifts
+
+          const staffs = []
+          const shifts = []
+          const cats = []
+          for (const shift in schedules) {
+            shifts.push(shift)
+
+            if (shiftFilters.length > 0 && !shiftFilters.includes(shift))
+              continue
+
+            for (const staff in schedules[shift]) {
+              staffs.push(staff)
+              for (const weekday in schedules[shift][staff]) {
+                schedules[shift][staff][weekday].forEach((s) => {
+                  cats.push(s.cat)
+                })
+              }
+            }
+          }
+          return {
+            shifts,
+            staffs: [...new Set(staffs)].sort(),
+            cats: [...new Set(cats)].sort()
+          }
+        },
+        get shifts() {
+          const { shifts } = this.data
+          const shiftFilters = this.filters.shifts
+          if (shiftFilters.length == 0) return shifts
+          return shifts.filter((s) => shiftFilters.includes(s))
         },
         getTrainingSection({ staffName, weekday }) {
           return this.traineeSchedules.filter(
@@ -157,7 +297,49 @@
               schedule.trainees.includes(staffName) &&
               schedule.weekday == weekday
           )
-        }
+        },
+
+        filterStaffs(staffs) {
+          const staffFilters = this.filters.staffs
+          if (staffFilters.length == 0) return staffs
+          return staffs.filter((s) => staffFilters.includes(s))
+        },
+        filterSchedules(schedules) {
+          const { cats, task } = this.filters
+          if (!schedules) return []
+
+          const tempSchedules =
+            cats.length == 0
+              ? schedules
+              : schedules.filter((s) => {
+                  return cats.includes(s.cat)
+                })
+
+          if (!task) return tempSchedules
+
+          return tempSchedules.filter((t) =>
+            t.name.toLowerCase().includes(task.toLowerCase())
+          )
+        },
+
+        getTasksByStaff(staff) {
+          const { tasks } = this
+          const { cats, task } = this.filters
+          const filteredTasks = tasks
+            .filter((t) => {
+              if (!cats.length) return true
+              return cats.includes(t.cat)
+            })
+            .filter((t) => {
+              return t.trainers.includes(staff)
+            })
+
+          if (!task) return filteredTasks
+          return filteredTasks.filter((t) =>
+            t.name.toLowerCase().includes(task.toLowerCase())
+          )
+        },
+        getStaffsByTask(task) {}
       }))
     })
   </script>
