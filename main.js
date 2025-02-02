@@ -95,9 +95,9 @@ async function main() {
     ])
   })
 
-  //console.log('# Workloads:\n', _.sortBy(workloads, ['shift', 'name']))
-  //console.log('\n')
-  //console.log('# Unassigned Tasks:\n', unassignedTasks)
+  console.log('# Workloads:\n', _.sortBy(workloads, ['shift', 'name']))
+  console.log('\n')
+  console.log('# Unassigned Tasks:\n', unassignedTasks)
 
   const flattenSchedules = _.reduce(
     schedules,
