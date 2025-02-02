@@ -1,9 +1,9 @@
-name	cat	shifts.0	shifts.1	shifts.2	staffs.0	staffs.1	staffs.2	staffs.3	trainners.0	trainees.0	weekdays.0	weekdays.1	weekdays.2	weekdays.3	weekdays.4	duration
-Invoice-Citi/JPM	invoice	Asia	US		Winnie	Allison	Dimitar		Dimitar	Geogri	mon	tue	wed	thu	fri	1.5
-Invoice-Barc	invoice	Asia	US	EU	Winnie	Allison	Georgi	Snezhi			mon	tue	wed		fri	1.5
-Invoice-CB/HDFC	invoice		US				Dimitar		Dimitar	Geogri	mon		wed	thu	fri	2
-Wire-Citi/Barc/JPM	wire			EU	Snezhi		Simona				mon	tue	wed	thu	fri	2
-Wire-Citi/Barc/CB	wire		US		Dimitar	Georgi					mon	tue		thu	fri	2
-Rec & Confirm-Citi/Barc/JPM	recon	Asia			Allison			Winnie			mon	tue	wed	thu	fri	1
-Rec & Confirm-Citi/Barc/CB	recon			EU	Snezhi	Simona					mon	tue	wed	thu	fri	1
-Rec & Confirm-Citi/Citi/CB	recon		US		Dimitar	Georgi					mon	tue	wed	thu	fri	1
+name,cat,shifts.0,shifts.1,shifts.2,staffs.0,staffs.1,staffs.2,staffs.3,staffs.4,staffs.5,trainers.0,trainees.0,weekdays.0,weekdays.1,weekdays.2,weekdays.3,weekdays.4,duration
+Invoice-Citi/JPM,invoice,Asia,US,,Winnie,Allison,Dimitar,,,,Dimitar,Georgi,mon,tue,wed,thu,fri,1.5
+Invoice-Barc,invoice,Asia,US,EU,Winnie,Allison,,Georgi,,Snezhi,,,mon,tue,wed,,fri,1.5
+Invoice-CB/HDFC,invoice,,US,,,,Dimitar,,,,Dimitar,Georgi,mon,,wed,thu,fri,2
+Wire-Citi/Barc/JPM,wire,,,EU,,,,,Simona,Snezhi,,,mon,tue,wed,thu,fri,2
+Wire-Citi/Barc/CB,wire,,US,,,,Dimitar,Georgi,,,,,mon,tue,,thu,fri,2
+Rec & Confirm-Citi/Barc/JPM,recon,Asia,,,Winnie,Allison,,,,,,,mon,tue,wed,thu,fri,1
+Rec & Confirm-Citi/Barc/CB,recon,,,EU,,,,,Simona,Snezhi,,,mon,tue,wed,thu,fri,1
+Rec & Confirm-Citi/Citi/CB,recon,,US,,,,Dimitar,Georgi,,,,,mon,tue,wed,thu,fri,1
