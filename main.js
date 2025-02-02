@@ -99,16 +99,29 @@ const traineeSchedules = flattenSchedules.filter(
   ({ trainees }) => trainees.length > 0
 )
 
-const result = _(flattenSchedules)
-  .groupBy('shift')
-  .mapValues((task) => {
-    const groupedTasks = _.groupBy(task, 'trainer')
-    const result = _.mapValues(groupedTasks, (task) => {
-      return _.groupBy(task, 'weekday')
+//const result = _(flattenSchedules)
+//  .groupBy('shift')
+//  .mapValues((task) => {
+//    const groupedTasks = _.groupBy(task, 'trainer')
+//    const result = _.mapValues(groupedTasks, (task) => {
+//      return _.groupBy(task, 'weekday')
+//    })
+//    return result
+//  })
+//  .value()
+
+const result = _.map(STAFFS, (s) => {
+  s.schedules = schedules.map((schedule) => {
+    const tasks = schedule.tasks.filter((t) => {
+      return t.trainer == s.name
     })
-    return result
+    return {
+      weekday: schedule.name,
+      tasks
+    }
   })
-  .value()
+  return s
+})
 
 const writeFileData = [
   { filename: './out/tasks.json', content: TASKS },

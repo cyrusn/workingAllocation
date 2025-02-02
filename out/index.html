@@ -3,128 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Schedules</title>
+    <title>Schedules Allocation</title>
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"
     ></script>
+
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://assets.fxcm.com/favicon.ico"
+    />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
     />
+    <link
+      href="https://cdn.datatables.net/v/bm/jq-3.7.0/jszip-3.10.1/dt-2.2.1/b-3.2.1/b-html5-3.2.1/b-print-3.2.1/r-3.0.3/sb-1.8.1/sp-2.3.3/sl-3.0.0/datatables.min.css"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/bm/jq-3.7.0/jszip-3.10.1/dt-2.2.1/b-3.2.1/b-html5-3.2.1/b-print-3.2.1/r-3.0.3/sb-1.8.1/sp-2.3.3/sl-3.0.0/datatables.min.js"></script>
   </head>
   <body x-data="data">
-    <section class="section mb-4 pb-0">
-      <h1 class="title">Filters</h1>
-      <!--<pre x-text='JSON.stringify(filters, "null", "\t")'></pre>-->
-      <form class="mb-5">
-        <div class="field is-horizontal">
-          <div class="field-body">
-            <div class="field">
-              <div class="control">
-                <div class="select is-fullwidth is-multiple">
-                  <select x-model="filters.shifts" multiple size="3">
-                    <template x-for="s in data.shifts">
-                      <option x-text="s"></option>
-                    </template>
-                  </select>
-                </div>
-                <span class="help has-text-link">Filter by Shift</span>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="control">
-                <div class="select is-fullwidth is-multiple">
-                  <select x-model="filters.staffs" multiple>
-                    <template x-for="s in data.staffs">
-                      <option x-text="s"></option>
-                    </template>
-                  </select>
-                </div>
-
-                <span class="help has-text-link">Filter by staffs</span>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="control">
-                <div class="select is-fullwidth is-multiple">
-                  <select x-model="filters.cats" multiple>
-                    <template x-for="c in data.cats">
-                      <option x-text="c"></option>
-                    </template>
-                  </select>
-                </div>
-                <span class="help has-text-link">Filter by Category</span>
-              </div>
-            </div>
-
-            <div class="field">
-              <p class="control is-expanded">
-                <input
-                  class="input"
-                  type="text"
-                  placeholder="Task"
-                  x-model="filters.task"
-                />
-              </p>
-
-              <span class="help has-text-link">Filter by Task</span>
-            </div>
-          </div>
-        </div>
-      </form>
-    </section>
     <section class="section">
       <h1 class="title">Schedules</h1>
-
       <table
         class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
-      >
-        <tr>
-          <th>Shift</th>
-          <th>Staff</th>
-          <th>Mon</th>
-          <th>Tue</th>
-          <th>Wed</th>
-          <th>Thu</th>
-          <th>Fri</th>
-        </tr>
-        <template x-for="shift in shifts">
-          <template x-if="schedules[shift]">
-            <template x-for="staff in staffs">
-              <template x-if="staff.shift == shift">
-                <tr>
-                  <td x-text="shift"></td>
-                  <td x-text="staff.name"></td>
-                  <template x-for="weekday in weekdays">
-                    <td class="content">
-                      <ul>
-                        <template
-                          x-for="schedule in filterSchedules(schedules[shift][staff.name][weekday])"
-                        >
-                          <li x-text="schedule.name"></li>
-                        </template>
-                        <template
-                          x-for="schedule in getTrainingSection({staffName: staff, weekday})"
-                        >
-                          <li x-text="`#${schedule.name}`"></li>
-                        </template>
-                        <template x-for="dayoffStaff in dayOffs[weekday]">
-                          <template x-if="dayoffStaff == staff.name">
-                            <li class="has-text-danger">Day Off</li>
-                          </template>
-                        </template>
-                      </ul>
-                    </td>
-                  </template>
-                </tr>
-              </template>
-            </template>
-          </template>
-        </template>
-      </table>
+        id="dataTable"
+      ></table>
     </section>
 
     <section class="section">
@@ -137,24 +46,20 @@
           <td>Staff</td>
           <td>Tasks</td>
         </tr>
-        <template x-for="shift in shifts">
+        <template x-for="shift in data.shifts">
           <template x-for="staff in staffs">
             <template x-if="staff.shift == shift">
-              <template
-                x-if="filters.staffs ==0 ||filters.staffs.includes(staff.name)"
-              >
-                <tr>
-                  <td x-text="shift"></td>
-                  <td x-text="staff.name"></td>
-                  <td class="content">
-                    <ul>
-                      <template x-for="t in getTasksByStaff(staff.name)">
-                        <li x-text="t.name"></li>
-                      </template>
-                    </ul>
-                  </td>
-                </tr>
-              </template>
+              <tr>
+                <td x-text="shift"></td>
+                <td x-text="staff.name"></td>
+                <td class="content">
+                  <div class="tags">
+                    <template x-for="t in getTasksByStaff(staff.name)">
+                      <span class="tag" x-text="t.name"></span>
+                    </template>
+                  </div>
+                </td>
+              </tr>
             </template>
           </template>
         </template>
@@ -225,7 +130,7 @@
         unassignedTasks: [],
         workloads: [],
         dayOffs: [],
-        filters: { staffs: [], shifts: [], cats: [], task: '' },
+        table: null,
         async init() {
           const ts = Date.now()
           const taskResponse = await fetch(`./tasks.json?ts=${ts}`)
@@ -240,7 +145,8 @@
           const traineeResponse = await fetch(
             `./traineeSchedules.json?ts=${ts}`
           )
-          this.traineeSchedules = await traineeResponse.json()
+          const trainingSchedules = await traineeResponse.json()
+          this.traineeSchedules = trainingSchedules
 
           const unassignedResponse = await fetch(
             `./unassignedTasks.json?ts=${ts}`
@@ -251,45 +157,146 @@
           this.workloads = await workloadResponse.json()
 
           const dayOffResponse = await fetch(`./dayOffs.json?ts=${ts}`)
-          this.dayOffs = await dayOffResponse.json()
+          const dayOffs = await dayOffResponse.json()
+          this.dayOffs = dayOffs
 
           const staffResponse = await fetch(`./staffs.json?ts=${ts}`)
           this.staffs = await staffResponse.json()
+          this.initTable(schedules, dayOffs, trainingSchedules)
         },
+        initTable(schedules, dayOffs, trainingSchedules) {
+          const columns = [
+            {
+              data: 'shift',
+              title: 'Shift'
+            },
+            {
+              data: 'name',
+              title: 'Staff'
+            }
+          ]
 
+          this.weekdays.forEach((weekday) => {
+            columns.push({
+              data: 'schedules',
+              title: weekday[0].toUpperCase() + weekday.slice(1),
+              render(data, type, row) {
+                const found = data.find((d) => d.weekday == weekday)
+                result = []
+                if (found) {
+                  result.push(...found.tasks.map((t) => t.name))
+                }
+
+                if (dayOffs[weekday].includes(row.name)) {
+                  result.push('Day off')
+                }
+
+                const trainingSections = trainingSchedules.filter((t) => {
+                  return t.weekday == weekday && t.trainees.includes(row.name)
+                })
+
+                if (trainingSections.length > 0) {
+                  trainingSections.forEach((t) => {
+                    result.push(`#${t.name}`)
+                  })
+                }
+
+                //return result
+                if (type == 'display' || type == 'filter') {
+                  return result.join('<br />')
+                }
+
+                return result
+              }
+            })
+          })
+
+          const buttonExtendOptions = {
+            exportOptions: {
+              format: {
+                body: function (data, column, row) {
+                  return data.replace(/<br\s*\/?>/gi, '\n')
+                }
+              }
+            }
+          }
+
+          const searchPanesOptions = this.tasks.map((t) => ({
+            label: t.name,
+            value: function (rowData, rowIdx) {
+              let result = false
+
+              if (!rowData) return
+              rowData.schedules.forEach(({ weekday, tasks }) => {
+                tasks.forEach((s) => {
+                  if (s.name == t.name) {
+                    result = result || true
+                  }
+                })
+              })
+              return result
+            }
+          }))
+
+          let table = new DataTable('#dataTable', {
+            data: schedules,
+            searchPanes: {
+              initCollapsed: true,
+              cascadePanes: true,
+              orderable: false,
+              panes: [
+                {
+                  header: 'Staff',
+                  options: this.staffs.map((s) => ({
+                    label: s.name,
+                    value: function (rowData, rowIdx) {
+                      return rowData.name == s.name
+                    }
+                  }))
+                },
+                {
+                  header: 'Tasks',
+                  options: searchPanesOptions
+                }
+              ]
+            },
+            buttons: [
+              {
+                extend: 'print',
+                className: 'is-info'
+              },
+              $.extend(true, {}, buttonExtendOptions, {
+                className: 'is-success ',
+                extend: 'excelHtml5'
+              }),
+              $.extend(true, {}, buttonExtendOptions, {
+                className: 'button is-warning',
+                extend: 'pdfHtml5'
+              })
+            ],
+            columns,
+            dom: 'PBti'
+          })
+
+          this.table = table
+        },
         get data() {
-          const { schedules, filters } = this
-          const shiftFilters = this.filters.shifts
+          const { schedules } = this
 
           const staffs = []
           const shifts = []
           const cats = []
-          for (const shift in schedules) {
+          schedules.forEach(({ name, shift, schedules }) => {
             shifts.push(shift)
+            staffs.push(name)
+            schedules.forEach((s) => cats.push(s.cat))
+          })
 
-            if (shiftFilters.length > 0 && !shiftFilters.includes(shift))
-              continue
-
-            for (const staff in schedules[shift]) {
-              staffs.push(staff)
-              for (const weekday in schedules[shift][staff]) {
-                schedules[shift][staff][weekday].forEach((s) => {
-                  cats.push(s.cat)
-                })
-              }
-            }
-          }
           return {
-            shifts,
+            shifts: [...new Set(shifts)].sort(),
             staffs: [...new Set(staffs)].sort(),
             cats: [...new Set(cats)].sort()
           }
-        },
-        get shifts() {
-          const { shifts } = this.data
-          const shiftFilters = this.filters.shifts
-          if (shiftFilters.length == 0) return shifts
-          return shifts.filter((s) => shiftFilters.includes(s))
         },
         getTrainingSection({ staffName, weekday }) {
           return this.traineeSchedules.filter(
@@ -298,48 +305,12 @@
               schedule.weekday == weekday
           )
         },
-
-        filterStaffs(staffs) {
-          const staffFilters = this.filters.staffs
-          if (staffFilters.length == 0) return staffs
-          return staffs.filter((s) => staffFilters.includes(s))
-        },
-        filterSchedules(schedules) {
-          const { cats, task } = this.filters
-          if (!schedules) return []
-
-          const tempSchedules =
-            cats.length == 0
-              ? schedules
-              : schedules.filter((s) => {
-                  return cats.includes(s.cat)
-                })
-
-          if (!task) return tempSchedules
-
-          return tempSchedules.filter((t) =>
-            t.name.toLowerCase().includes(task.toLowerCase())
-          )
-        },
-
         getTasksByStaff(staff) {
           const { tasks } = this
-          const { cats, task } = this.filters
-          const filteredTasks = tasks
-            .filter((t) => {
-              if (!cats.length) return true
-              return cats.includes(t.cat)
-            })
-            .filter((t) => {
-              return t.trainers.includes(staff)
-            })
-
-          if (!task) return filteredTasks
-          return filteredTasks.filter((t) =>
-            t.name.toLowerCase().includes(task.toLowerCase())
-          )
-        },
-        getStaffsByTask(task) {}
+          return tasks.filter((t) => {
+            return t.trainers.includes(staff)
+          })
+        }
       }))
     })
   </script>
