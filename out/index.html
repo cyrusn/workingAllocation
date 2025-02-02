@@ -78,6 +78,7 @@
                 <th>Weekday</th>
                 <th>Shift</th>
                 <th>Task</th>
+                <th>Staffs</th>
                 <th>Trainers</th>
                 <th>Trainees</th>
               </tr>
@@ -88,6 +89,7 @@
                   ></td>
                   <td x-text="task.shift"></td>
                   <td x-text="task.name"></td>
+                  <td x-text="task.staffs.join(', ')"></td>
                   <td x-text="task.trainers.join(', ')"></td>
                   <td x-text="task.trainees.join(', ')"></td>
                 </tr>
@@ -308,7 +310,7 @@
         getTasksByStaff(staff) {
           const { tasks } = this
           return tasks.filter((t) => {
-            return t.trainers.includes(staff)
+            return t.staffs.includes(staff)
           })
         }
       }))
