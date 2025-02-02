@@ -8,7 +8,6 @@
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"
     ></script>
-
     <link
       rel="icon"
       type="image/x-icon"
@@ -37,57 +36,6 @@
     </section>
 
     <section class="section">
-      <h1 class="title">Staffs by Tasks</h1>
-      <table
-        class="table is-bordered is-striped is-narrow is-hoverable"
-      >
-        <tr>
-          <td>Task</td>
-          <td>Shift</td>
-          <td>Staffs</td>
-        </tr>
-        <template x-for="t in tasks">
-          <template x-for="shift in t.shifts.filter(s=>s)">
-            <tr>
-              <td x-text="t.name"></td>
-              <td x-text="shift"></td>
-              <td x-text='staffs.filter(staff => t.staffs.includes(staff.name) && staff.shift==shift).map(s=>s.name).join(", ")'</td>
-            </tr>
-          </template>
-        </template>
-      </table>
-    </section>
-    <section class="section">
-      <h1 class="title">Tasks by Staffs</h1>
-      <table
-        class="table is-bordered is-striped is-narrow is-hoverable"
-      >
-        <tr>
-          <td>Shift</td>
-          <td>Staff</td>
-          <td>Tasks</td>
-        </tr>
-        <template x-for="shift in data.shifts">
-          <template x-for="staff in staffs">
-            <template x-if="staff.shift == shift">
-              <tr>
-                <td x-text="shift"></td>
-                <td x-text="staff.name"></td>
-                <td class="content">
-                  <div class="tags">
-                    <template x-for="t in getTasksByStaff(staff.name)">
-                      <span class="tag" x-text="t.name"></span>
-                    </template>
-                  </div>
-                </td>
-              </tr>
-            </template>
-          </template>
-        </template>
-      </table>
-    </section>
-
-    <section class="section">
       <div class="level">
         <div class="level-item">
           <div>
@@ -110,8 +58,9 @@
                   ></td>
                   <td x-text="task.shift"></td>
                   <td x-text="task.name"></td>
-                  <td x-text="task.staffs.join(', ')"></td>
+                  <td x-text="(task.staffs || []).join(', ')"></td>
                   <td x-text="task.trainers.join(', ')"></td>
+
                   <td x-text="task.trainees.join(', ')"></td>
                 </tr>
               </template>
@@ -140,6 +89,57 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <section class="section">
+      <h1 class="title">Staffs by Tasks</h1>
+      <table class="table is-bordered is-striped is-narrow is-hoverable">
+        <tr>
+          <td>Task</td>
+          <td>Shift</td>
+          <td>Staffs</td>
+        </tr>
+        <template x-for="t in tasks">
+          <template x-for="shift in t.shifts.filter(s=>s)">
+            <tr>
+              <td x-text="t.name"></td>
+              <td x-text="shift"></td>
+
+              <td
+                x-text="staffs.filter(staff => t.staffs.includes(staff.name) && staff.shift==shift).map(s=>s.name).join(', ')"
+              ></td>
+            </tr>
+          </template>
+        </template>
+      </table>
+    </section>
+
+    <section class="section">
+      <h1 class="title">Tasks by Staffs</h1>
+      <table class="table is-bordered is-striped is-narrow is-hoverable">
+        <tr>
+          <td>Shift</td>
+          <td>Staff</td>
+          <td>Tasks</td>
+        </tr>
+        <template x-for="shift in data.shifts">
+          <template x-for="staff in staffs">
+            <template x-if="staff.shift == shift">
+              <tr>
+                <td x-text="shift"></td>
+                <td x-text="staff.name"></td>
+                <td class="content">
+                  <div class="tags">
+                    <template x-for="t in getTasksByStaff(staff.name)">
+                      <span class="tag" x-text="t.name"></span>
+                    </template>
+                  </div>
+                </td>
+              </tr>
+            </template>
+          </template>
+        </template>
+      </table>
     </section>
   </body>
   <script>
@@ -207,15 +207,18 @@
                 const found = data.find((d) => d.weekday == weekday)
                 result = []
                 if (found) {
-                  result.push(...found.tasks.map((t) => {
-                    if (t.trainees.length > 0) {
-                      return `(TR) ${t.name}`
-                    }
-                    return t.name 
-                  }))
+                  result.push(
+                    ...found.tasks.map((t) => {
+                      console.log(t)
+                      if (t.trainees.length > 0) {
+                        return `(TR) ${t.name}`
+                      }
+                      return t.name
+                    })
+                  )
                 }
 
-                if (dayOffs[weekday].includes(row.name)) {
+                if (dayOffs[weekday] && dayOffs[weekday].includes(row.name)) {
                   result.push('Day off')
                 }
 
