@@ -11,7 +11,7 @@
   {
     "name": "Invoice-Barc",
     "cat": "invoice",
-    "trainers": ["Winnie", "Allison", "Dimitar", "Snezhi"],
+    "trainers": ["Winnie", "Allison", "Georgi", "Snezhi"],
     "trainees": [],
     "shifts": ["Asia", "US", "EU"],
     "weekdays": ["mon", "tue", "wed", "thu", "fri"],
