@@ -2,11 +2,12 @@ const _ = require('lodash')
 const fs = require('fs')
 const csv = require('csvtojson')
 
-//const TASKS = _.shuffle(require('./data/tasks.json'))
 const STAFFS = _.shuffle(require('./data/staffs.json'))
 const REQUIREMENTS = require('./data/requirements.json')
 const UNAVAILABLES = require('./data/unavailables.json')
 const PREASSIGNED_TASKS = require('./data/preassigned.json')
+const CONFLICTS = REQUIREMENTS.conflicts
+const ONE_PERSON_TASKS = REQUIREMENTS.onePersonTasks
 
 const workloads = STAFFS.map(({ name, shift }) => ({
   shift,
@@ -23,16 +24,11 @@ const schedules = [
 ]
 
 const unassignedTasks = []
-
 async function main() {
   const TASKS = await csv({
     ignoreEmpty: true,
     nullObject: true
   }).fromFile('./data/tasks.csv')
-
-  //console.log(TASKS)
-  const CONFLICTS = REQUIREMENTS.conflicts
-  const ONE_PERSON_TASKS = REQUIREMENTS.onePersonTasks
 
   schedules.forEach((schedule) => {
     const weekday = schedule.name
@@ -115,34 +111,29 @@ async function main() {
     ({ trainees }) => _.compact(trainees).length > 0
   )
 
-  //const result = _(flattenSchedules)
-  //  .groupBy('shift')
-  //  .mapValues((task) => {
-  //    const groupedTasks = _.groupBy(task, 'trainer')
-  //    const result = _.mapValues(groupedTasks, (task) => {
-  //      return _.groupBy(task, 'weekday')
-  //    })
-  //    return result
-  //  })
-  //  .value()
-
-  const result = _.map(STAFFS, (s) => {
-    s.schedules = schedules.map((schedule) => {
-      const tasks = schedule.tasks.filter((t) => {
-        return t.staff == s.name
+  const assignedStaffSchedules = _(STAFFS)
+    .map((s) => {
+      s.schedules = schedules.map((schedule) => {
+        const tasks = schedule.tasks.filter((t) => {
+          return t.staff == s.name
+        })
+        return {
+          weekday: schedule.name,
+          tasks
+        }
       })
-      return {
-        weekday: schedule.name,
-        tasks
-      }
+      return s
     })
-    return s
-  })
+    .sortBy(['shift', 'name'])
+    .value()
 
   const writeFileData = [
     { filename: './out/tasks.json', content: TASKS },
     { filename: './out/staffs.json', content: STAFFS },
-    { filename: './out/assignedSchedules.json', content: result },
+    {
+      filename: './out/assignedSchedules.json',
+      content: assignedStaffSchedules
+    },
     { filename: './out/traineeSchedules.json', content: traineeSchedules },
     {
       filename: './out/workloads.json',
@@ -155,93 +146,94 @@ async function main() {
   writeFileData.forEach(({ filename, content }) => {
     fs.writeFileSync(filename, JSON.stringify(content, null, 2), 'utf8')
   })
+}
 
-  function getAvailableStaffs(task, assignedSchedules, dayOffStaffs) {
-    const { name, cat, shift, staffs, trainers, trainees } = task
+main()
 
-    const preassignedStaffs = _(STAFFS)
-      .shuffle()
-      .filter((s) => {
-        const found = PREASSIGNED_TASKS.find((t) => {
-          return t.name == name && t.shift == shift
+function getAvailableStaffs(task, assignedSchedules, dayOffStaffs) {
+  const { name, cat, shift, staffs, trainers, trainees } = task
+
+  const preassignedStaffs = _(STAFFS)
+    .shuffle()
+    .filter((s) => {
+      const found = PREASSIGNED_TASKS.find((t) => {
+        return t.name == name && t.shift == shift
+      })
+
+      if (found) {
+        return found.staffs.includes(s.name) && !dayOffStaffs.includes(s.name)
+      }
+
+      return false
+    })
+    .value()
+
+  if (preassignedStaffs.length > 0) return preassignedStaffs
+
+  const shiftTrainers = getStaffsInListByShift(trainers, shift)
+  const shiftTrainees = getStaffsInListByShift(trainees, shift)
+  const shiftStaffs = getStaffsInListByShift(staffs, shift)
+  const targets = []
+
+  if (shiftTrainers.length == 0) {
+    targets.push(...shiftStaffs)
+  }
+
+  targets.push(...shiftTrainers)
+
+  const matchedStaffs = _(targets)
+    .uniq()
+    .filter((s) => {
+      if (dayOffStaffs.includes(s.name)) return false
+
+      // ignore conflict task if the task has trainees
+      if (shiftTrainees.length == 0) {
+        // CONFLICTS is a 2D array
+        const conflictCategories = _(CONFLICTS)
+          .filter((pairs) => pairs.includes(cat))
+          .flatten()
+          .filter((c) => c != cat)
+          .value()
+
+        const doingConflictedTaskStaffs = assignedSchedules.filter((t) => {
+          // check if the staff assigned to any conflict task
+          return t.staff == s.name && conflictCategories.includes(t.cat)
         })
 
-        if (found) {
-          return found.staffs.includes(s.name) && !dayOffStaffs.includes(s.name)
+        if (doingConflictedTaskStaffs.length > 0) {
+          return false
         }
-
-        return false
-      })
-      .value()
-
-    if (preassignedStaffs.length > 0) return preassignedStaffs
-
-    const shiftTrainers = getStaffsInListByShift(trainers, shift)
-    const shiftTrainees = getStaffsInListByShift(trainees, shift)
-    const shiftStaffs = getStaffsInListByShift(staffs, shift)
-    const targets = []
-
-    if (shiftTrainers.length == 0) {
-      targets.push(...shiftStaffs)
-    }
-
-    targets.push(...shiftTrainers)
-
-    const matchedStaffs = _(targets)
-      .uniq()
-      .filter((s) => {
-        if (dayOffStaffs.includes(s.name)) return false
-
-        // ignore conflict task if the task has trainees
-        if (shiftTrainees.length == 0) {
-          // CONFLICTS is a 2D array
-          const conflictCategories = _(CONFLICTS)
-            .filter((pairs) => pairs.includes(cat))
-            .flatten()
-            .filter((c) => c != cat)
-            .value()
-
-          const doingConflictedTaskStaffs = assignedSchedules.filter((t) => {
-            // check if the staff assigned to any conflict task
-            return t.staff == s.name && conflictCategories.includes(t.cat)
-          })
-
-          if (doingConflictedTaskStaffs.length > 0) {
-            return false
-          }
-        }
-
-        return true
-      })
-      .value()
-
-    const assignedOnePersonTaskStaffs = _.filter(matchedStaffs, (s) => {
-      const isOnePersonTask = ONE_PERSON_TASKS.includes(cat)
-
-      if (isOnePersonTask) {
-        const assignedOnePersonTasks = assignedSchedules.filter((t) => {
-          return t.cat == cat && t.shift == s.shift
-        })
-
-        if (assignedOnePersonTasks.length == 0) return true
-
-        const found = assignedOnePersonTasks.find(
-          (t) => t.staff == s.name && t.shift == s.shift
-        )
-
-        if (found) return true
-
-        return false
       }
 
       return true
     })
+    .value()
 
-    if (assignedOnePersonTaskStaffs.length > 0)
-      return assignedOnePersonTaskStaffs
+  const assignedOnePersonTaskStaffs = _.filter(matchedStaffs, (s) => {
+    const isOnePersonTask = ONE_PERSON_TASKS.includes(cat)
 
-    return matchedStaffs
-  }
+    if (isOnePersonTask) {
+      const assignedOnePersonTasks = assignedSchedules.filter((t) => {
+        return t.cat == cat && t.shift == s.shift
+      })
+
+      if (assignedOnePersonTasks.length == 0) return true
+
+      const found = assignedOnePersonTasks.find(
+        (t) => t.staff == s.name && t.shift == s.shift
+      )
+
+      if (found) return true
+
+      return false
+    }
+
+    return true
+  })
+
+  if (assignedOnePersonTaskStaffs.length > 0) return assignedOnePersonTaskStaffs
+
+  return matchedStaffs
 }
 
 function assignTaskToStaff(availableStaffs, workloads) {
@@ -286,5 +278,3 @@ function getStaffsInListByShift(list, shift) {
     })
     .value()
 }
-
-main()
