@@ -207,7 +207,12 @@
                 const found = data.find((d) => d.weekday == weekday)
                 result = []
                 if (found) {
-                  result.push(...found.tasks.map((t) => t.name))
+                  result.push(...found.tasks.map((t) => {
+                    if (t.trainees.length > 0) {
+                      return `(TR) ${t.name}`
+                    }
+                    return t.name 
+                  }))
                 }
 
                 if (dayOffs[weekday].includes(row.name)) {
@@ -220,7 +225,7 @@
 
                 if (trainingSections.length > 0) {
                   trainingSections.forEach((t) => {
-                    result.push(`#${t.name}`)
+                    result.push(`(TE) ${t.name}`)
                   })
                 }
 
