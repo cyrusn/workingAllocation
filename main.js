@@ -24,6 +24,7 @@ const schedules = [
 ]
 
 const unassignedTasks = []
+
 async function main() {
   const TASKS = await csv({
     ignoreEmpty: true,
@@ -101,8 +102,8 @@ async function main() {
 
   const flattenSchedules = _.reduce(
     schedules,
-    (prev, task) => {
-      prev.push(...task.tasks)
+    (prev, schedule) => {
+      prev.push(...schedule.tasks)
       return prev
     },
     []
