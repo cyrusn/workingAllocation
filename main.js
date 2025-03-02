@@ -35,7 +35,10 @@ async function main() {
     const weekday = schedule.name
     const assignedSchedules = []
 
-    TASKS.filter(({ weekdays }) => weekdays.includes(weekday)).forEach(
+    TASKS.filter(({ weekdays }) => {
+      if (!weekdays) return false
+      return weekdays.includes(weekday)
+    }).forEach(
       (task) => {
         const { name, cat, duration } = task
         const staffs = _.compact(task.staffs || [])
